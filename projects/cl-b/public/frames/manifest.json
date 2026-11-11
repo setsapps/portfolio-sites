@@ -1,0 +1,4 @@
+{
+  "_readme": "Add rendered video frames here to switch the homepage from real-time 3D to the cinematic frame-scrub. Example scene: { \"path\": \"frames/s1/\", \"count\": 240, \"ext\": \"webp\", \"pad\": 4 } for files frames/s1/0001.webp ... 0240.webp. Scenes play in order.",
+  "scenes": []
+}

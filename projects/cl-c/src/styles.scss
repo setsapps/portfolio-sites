@@ -1,0 +1,45 @@
+@use '../../shared/base.scss';
+
+/* Ludhiana Hospital — default "Saffron" (warm teal + saffron on ivory) */
+:root,[data-theme=saffron]{
+  --bg:#fffaf3; --bg-2:#fbf0e1; --surface:#ffffff; --text:#14262b; --muted:#56686d; --line:#ece1d0;
+  --primary:#0b6b6f; --on-primary:#fff; --primary-2:#14898d; --accent:#e9812a; --on-accent:#fff; --accent-soft:#fde7d1;
+  --deep:#0a3d42; --gold:#d9a441; --danger:#c62828; --ok:#1b7a43; --focus:#1a56db;
+  --hero-ov:linear-gradient(100deg,rgba(10,61,66,.92) 0%,rgba(10,61,66,.7) 42%,rgba(10,61,66,.1) 100%);
+  --grad:linear-gradient(120deg,#0b6b6f,#14898d 55%,#e9812a);
+  --font-display:'Fraunces',Georgia,serif; --font-body:'Plus Jakarta Sans',system-ui,sans-serif; --display-weight:600; --max:1320px; --r:20px; --btn-r:14px;
+}
+[data-theme=royal]{ --bg:#f7f9ff; --bg-2:#e9eefc; --line:#dbe2f3; --primary:#1e3a8a; --primary-2:#2f55c7; --accent:#e9812a; --accent-soft:#fde7d1; --deep:#14245a; --text:#111a33; --muted:#4f5a75;
+  --hero-ov:linear-gradient(100deg,rgba(20,36,90,.92),rgba(20,36,90,.6) 45%,transparent); --grad:linear-gradient(120deg,#1e3a8a,#2f55c7 55%,#e9812a); }
+[data-theme=emerald]{ --bg:#f6fbf7; --bg-2:#e5f3ea; --line:#d5e8db; --primary:#0f6b45; --primary-2:#178a5c; --accent:#c98a1b; --accent-soft:#f7ebcf; --deep:#0b4430; --text:#10241a; --muted:#4c6357;
+  --hero-ov:linear-gradient(100deg,rgba(11,68,48,.92),rgba(11,68,48,.6) 45%,transparent); --grad:linear-gradient(120deg,#0f6b45,#178a5c 55%,#c98a1b); }
+[data-theme=rose]{ --bg:#fff7f7; --bg-2:#fbe8ea; --line:#f1d8db; --primary:#8e1f3d; --primary-2:#b83258; --accent:#e9812a; --accent-soft:#fde7d1; --deep:#5a1027; --text:#2a1219; --muted:#6d5058;
+  --hero-ov:linear-gradient(100deg,rgba(90,16,39,.92),rgba(90,16,39,.6) 45%,transparent); --grad:linear-gradient(120deg,#8e1f3d,#b83258 55%,#e9812a); }
+[data-theme=night]{ --bg:#0c1517; --bg-2:#132226; --surface:#162a2e; --text:#e8f3f2; --muted:#9db5b5; --line:#24393d; --primary:#3cc6c0; --on-primary:#062022; --primary-2:#62d9d3; --accent:#f5a259; --on-accent:#1f1206; --accent-soft:#3a2a1a; --deep:#071012;
+  --hero-ov:linear-gradient(100deg,rgba(7,16,18,.95),rgba(7,16,18,.65) 45%,rgba(7,16,18,.2)); --grad:linear-gradient(120deg,#3cc6c0,#f5a259); --focus:#9ec5ff; --danger:#ff8a80; --ok:#69dba0; }
+[data-theme=contrast]{ --bg:#fff; --bg-2:#f0f0f0; --surface:#fff; --text:#000; --muted:#222; --line:#000; --primary:#00474b; --primary-2:#00474b; --accent:#8a3b00; --accent-soft:#fff0e0; --deep:#000;
+  --hero-ov:linear-gradient(rgba(0,0,0,.85),rgba(0,0,0,.85)); --grad:linear-gradient(#00474b,#00474b); --focus:#0040ff; }
+.sec{padding:96px 0}@media (max-width:760px){.sec{padding:64px 0}}
+.sec-h{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:36px}
+.sec-h h2{font-size:clamp(2rem,4.2vw,3.4rem);letter-spacing:-.02em;margin-top:10px}
+.sec-h h2 em{font-style:italic;color:var(--accent)}
+.sec-h p{max-width:48ch;color:var(--muted);margin:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .3s}
+.card:hover{box-shadow:0 24px 50px -28px color-mix(in srgb,var(--deep) 60%,transparent)}
+.page-hero{position:relative;padding:90px 0 70px;color:#fff;background:var(--deep);overflow:hidden;isolation:isolate}
+.page-hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.page-hero::before{content:"";position:absolute;inset:0;background:var(--hero-ov);z-index:-1}
+.page-hero h1{font-size:clamp(2.4rem,5.6vw,4.4rem);max-width:18ch;letter-spacing:-.02em}
+.page-hero h1 em{color:var(--gold);font-style:italic}
+.page-hero p{font-size:1.15rem;max-width:56ch;opacity:.92;margin-top:16px}
+.crumbs{font-size:.85rem;opacity:.85;margin-bottom:14px}.crumbs a{text-decoration:none}
+.field{display:grid;gap:6px}.field label{font-weight:700;font-size:.88rem}
+.field input,.field select,.field textarea{min-height:50px;border:1.5px solid var(--line);background:var(--surface);color:var(--text);padding:10px 14px;border-radius:12px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 18%,transparent)}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{min-height:44px;padding:0 16px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--text);font-weight:700;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+.blur-lock{position:relative;border-radius:var(--r);overflow:hidden}
+.blur-lock>.inner{filter:blur(7px);pointer-events:none;user-select:none}
+.blur-lock>.gate{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:12px;text-align:center;padding:20px;background:color-mix(in srgb,var(--bg) 40%,transparent)}
+.rupee::before{content:"₹"}
