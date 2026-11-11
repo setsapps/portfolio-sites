@@ -4,14 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LockService, RevealDirective, ToastService, store } from '@shared/core';
 import { IMG, RESOURCES, Resource } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [DatePipe, FormsModule, RouterLink, RevealDirective],
+  standalone: true, imports: [IconComponent, DatePipe, FormsModule, RouterLink, RevealDirective],
   template: `
   <section class="page-hero"><img [src]="img.talk" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Resources</span></nav>
       <h1 class="display">The resource <em>library</em></h1><p>Guides, toolkits, templates, webinars and podcasts, curated by the CL-A community. Search, filter and save what you need.</p>
-      <div class="big-search"><label for="rq" class="sr-only">Search the library</label><input id="rq" type="search" placeholder="Try “negotiation”, “policy”, “hiring”…" [ngModel]="q()" (ngModelChange)="q.set($event)"><span aria-hidden="true">⌕</span></div>
+      <div class="big-search"><label for="rq" class="sr-only">Search the library</label><input id="rq" type="search" placeholder="Try “negotiation”, “policy”, “hiring”…" [ngModel]="q()" (ngModelChange)="q.set($event)"><span aria-hidden="true"><x-ic n="⌕"></x-ic></span></div>
     </div>
   </section>
   <section class="sec" style="padding-top:56px">
@@ -27,23 +28,23 @@ import { IMG, RESOURCES, Resource } from '../data';
         <fieldset><legend>Access</legend>
           @for (a of ['All','Free','Members']; track a) { <label class="ck"><input type="radio" name="acc" [checked]="acc()===a" (change)="acc.set(a)"> {{ a }}</label> }
         </fieldset>
-        <label class="ck"><input type="checkbox" [checked]="savedOnly()" (change)="savedOnly.set(!savedOnly())"> ♥ Saved only ({{ saved().size }})</label>
+        <label class="ck"><input type="checkbox" [checked]="savedOnly()" (change)="savedOnly.set(!savedOnly())"> <x-ic n="♥"></x-ic> Saved only ({{ saved().size }})</label>
       </aside>
       <div>
         <div class="bar">
           <button class="btn btn-l fbtn" (click)="fo.set(!fo())" [attr.aria-expanded]="fo()">Filters</button>
           <span role="status" aria-live="polite"><b>{{ list().length }}</b> of {{ all.length }} resources</span>
-          <div class="active">@for (c of chips(); track c) {<button class="chip" (click)="rm(c)" [attr.aria-label]="'Remove filter ' + c">{{ c }} ✕</button>}</div>
+          <div class="active">@for (c of chips(); track c) {<button class="chip" (click)="rm(c)" [attr.aria-label]="'Remove filter ' + c">{{ c }} <x-ic n="✕"></x-ic></button>}</div>
           <label class="sort">Sort <select [ngModel]="sort()" (ngModelChange)="sort.set($event)"><option value="new">Newest</option><option value="az">A–Z</option><option value="short">Quickest read</option></select></label>
         </div>
         <div class="grid">
           @for (r of list(); track r.id; let i = $index) {
             <article class="rc card" [reveal]="(i%3)*60">
-              <div class="top"><span class="fmt" [class]="'fmt f-' + r.type">{{ icon(r.type) }} {{ r.type }}</span>
-                <button class="heart" [attr.aria-pressed]="saved().has(r.id)" (click)="save(r)" [attr.aria-label]="(saved().has(r.id) ? 'Unsave ' : 'Save ') + r.title">{{ saved().has(r.id) ? '♥' : '♡' }}</button></div>
+              <div class="top"><span class="fmt" [class]="'fmt f-' + r.type"><x-ic [n]="icon(r.type)"></x-ic> {{ r.type }}</span>
+                <button class="heart" [attr.aria-pressed]="saved().has(r.id)" (click)="save(r)" [attr.aria-label]="(saved().has(r.id) ? 'Unsave ' : 'Save ') + r.title"><x-ic [n]="saved().has(r.id) ? 'heart-fill' : 'heart'"></x-ic></button></div>
               <h2>{{ r.title }}</h2><p>{{ r.blurb }}</p>
               <div class="ft"><span>{{ r.topic }} · {{ r.date | date:'MMM y' }} · {{ r.mins }} min</span>
-                <button class="btn" [class.btn-p]="r.access==='Free'" [class.btn-l]="r.access!=='Free'" (click)="openR(r)">{{ r.access === 'Free' ? 'Open' : '🔒 Members' }}<span class="sr-only">: {{ r.title }}</span></button></div>
+                <button class="btn" [class.btn-p]="r.access==='Free'" [class.btn-l]="r.access!=='Free'" (click)="openR(r)">@if (r.access === 'Free') {Open} @else {<x-ic n="lock"></x-ic> Members}<span class="sr-only">: {{ r.title }}</span></button></div>
             </article>
           } @empty { <div class="empty card"><b>No matches.</b><p>Try removing a filter or searching another word.</p><button class="btn btn-p" (click)="clear()">Reset filters</button></div> }
         </div>
@@ -93,7 +94,7 @@ export class ResourcesPage {
   tog(s: typeof this.tsel, v: string) { const n = new Set(s()); n.has(v) ? n.delete(v) : n.add(v); s.set(n); }
   rm(c: string) { if (this.tsel().has(c)) this.tog(this.tsel, c); else if (this.psel().has(c)) this.tog(this.psel, c); else this.acc.set('All'); }
   clear() { this.tsel.set(new Set()); this.psel.set(new Set()); this.acc.set('All'); this.q.set(''); this.savedOnly.set(false); }
-  save(r: Resource) { const n = new Set(this.saved()); n.has(r.id) ? n.delete(r.id) : n.add(r.id); this.saved.set(n); store.set('cla:saved', JSON.stringify([...n])); this.toast.show(n.has(r.id) ? 'Saved to your library ♥' : 'Removed from saved', 'ok'); }
+  save(r: Resource) { const n = new Set(this.saved()); n.has(r.id) ? n.delete(r.id) : n.add(r.id); this.saved.set(n); store.set('cla:saved', JSON.stringify([...n])); this.toast.show(n.has(r.id) ? 'Saved to your library' : 'Removed from saved', 'ok'); }
   openR(r: Resource) { if (r.access === 'Members') this.lock.gate('Members-only resource'); else this.lock.gate('Resource download'); }
   icon(t: string) { return ({ Guide: '📘', Toolkit: '🧰', Webinar: '🎥', Report: '📊', Podcast: '🎧', Template: '📄' } as Record<string, string>)[t] || '•'; }
 }

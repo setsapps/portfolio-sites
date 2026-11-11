@@ -2,6 +2,8 @@ import { Component, inject, signal, computed, Input, ElementRef, ViewChild, effe
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LockService, SITE, ThemeService, ToastService, store } from './core';
+import { IconComponent } from './icons';
+import { RefGateComponent } from './refgate';
 
 /* =========================================================
    LOCK MODAL — the "advanced feature" gate (demo only)
@@ -9,21 +11,21 @@ import { LockService, SITE, ThemeService, ToastService, store } from './core';
    mode otp-referral: phone → OTP → doctor referral no. → pending
    ========================================================= */
 @Component({
-  selector: 'x-lock', standalone: true, imports: [FormsModule],
+  selector: 'x-lock', standalone: true, imports: [IconComponent, FormsModule, RefGateComponent],
   template: `
   @if (lock.open()) {
   <div class="ov" (click)="close()"></div>
   <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="lk-h" #dlg (keydown)="trap($event)">
-    <button class="x" (click)="close()" aria-label="Close">✕</button>
+    <button class="x" (click)="close()" aria-label="Close"><x-ic n="✕"></x-ic></button>
+    @if (cfg.lockMode === 'email') {
     <div class="lk-top">
-      <div class="lk-ico" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
-      </div>
+      <div class="lk-ico" aria-hidden="true"><x-ic n="lock" s="26"></x-ic></div>
       <div>
         <div class="lk-eb">Secure area · {{ lock.feature() }}</div>
         <h2 id="lk-h">{{ cfg.lockTitle }}</h2>
       </div>
     </div>
+    } @else { <h2 id="lk-h" class="sr-only">{{ cfg.lockTitle }}</h2> }
 
     @if (cfg.lockMode === 'email') {
       @switch (step()) {
@@ -42,7 +44,7 @@ import { LockService, SITE, ThemeService, ToastService, store } from './core';
             <div class="row"><label class="ck"><input type="checkbox" name="r" [(ngModel)]="remember"> Keep me signed in</label><a href="#" (click)="$event.preventDefault(); step.set(3)">Forgot password?</a></div>
             @if (err()) { <p class="err" role="alert">{{ err() }}</p> }
             <button class="go" [disabled]="busy()">@if (busy()) {<span class="spin"></span> Verifying…} @else { Sign in securely }</button>
-            <p class="tiny">🔒 256-bit TLS · 2-step verification · {{ cfg.lockNote }}</p>
+            <p class="tiny"><x-ic n="🔒"></x-ic> 256-bit TLS · 2-step verification · {{ cfg.lockNote }}</p>
           </form>
         }
         @case (1) {
@@ -70,57 +72,11 @@ import { LockService, SITE, ThemeService, ToastService, store } from './core';
           </form>
         }
         @case (4) {
-          <div class="state ok"><div class="tick" aria-hidden="true">✓</div><p role="status"><b>Request received.</b> An administrator reviews new access requests. You'll get an email once approved.</p><button class="go" (click)="close()">Done</button></div>
+          <div class="state ok"><div class="tick" aria-hidden="true"><x-ic n="✓"></x-ic></div><p role="status"><b>Request received.</b> An administrator reviews new access requests. You'll get an email once approved.</p><button class="go" (click)="close()">Done</button></div>
         }
       }
     } @else {
-      <!-- OTP + doctor referral -->
-      <ol class="steps" aria-label="Verification steps">
-        <li [class.on]="step()>=0">Mobile</li><li [class.on]="step()>=1">OTP</li><li [class.on]="step()>=2">Referral</li>
-      </ol>
-      @switch (step()) {
-        @case (0) {
-          <form class="f" (ngSubmit)="sendOtp()">
-            <label for="ph">Mobile number</label>
-            <div class="phone"><span>🇮🇳 +91</span><input id="ph" name="ph" inputmode="numeric" maxlength="10" [(ngModel)]="phone" autocomplete="tel-national" placeholder="98XXXXXXXX" aria-describedby="ph-h"></div>
-            <small id="ph-h">We'll send a 6-digit one-time password by SMS.</small>
-            @if (err()) { <p class="err" role="alert">{{ err() }}</p> }
-            <button class="go" [disabled]="busy()">@if (busy()) {<span class="spin"></span> Sending…} @else { Send OTP }</button>
-          </form>
-        }
-        @case (1) {
-          <form class="f" (ngSubmit)="verifyOtp()">
-            <p>Enter the code sent to <b>+91 {{ phone.slice(0,5) }} {{ phone.slice(5) }}</b> &nbsp;<a href="#" (click)="$event.preventDefault(); step.set(0)">Change</a></p>
-            <div class="otp" role="group" aria-label="One-time password">
-              @for (i of [0,1,2,3,4,5]; track i) {
-                <input #o inputmode="numeric" [attr.autocomplete]="i===0 ? 'one-time-code' : 'off'" [attr.aria-label]="'Digit ' + (i+1)" (input)="otpIn($event, i)" (keydown)="otpKey($event, i)" (paste)="otpPaste($event)">
-              }
-            </div>
-            <p class="tiny">@if (timer() > 0) { Resend code in 0:{{ timer() < 10 ? '0' : '' }}{{ timer() }} } @else { <a href="#" (click)="$event.preventDefault(); startTimer(); toast.show('A new OTP has been sent','info')">Resend OTP</a> }</p>
-            @if (err()) { <p class="err" role="alert">{{ err() }}</p> }
-            <button class="go" [disabled]="busy()">@if (busy()) {<span class="spin"></span> Verifying…} @else { Verify OTP }</button>
-          </form>
-        }
-        @case (2) {
-          <form class="f" (ngSubmit)="checkRef()">
-            <div class="okline">✓ Mobile verified</div>
-            <label for="ref">Doctor referral number</label>
-            <input id="ref" name="ref" [(ngModel)]="ref" placeholder="e.g. LH-REF-2026-00000" aria-describedby="ref-h" autocomplete="off">
-            <small id="ref-h">Printed on your prescription or referral slip from your consulting doctor.</small>
-            @if (err()) { <p class="err" role="alert">{{ err() }}</p> }
-            <button class="go" [disabled]="busy()">@if (busy()) {<span class="spin"></span> Checking referral…} @else { Continue }</button>
-          </form>
-        }
-        @case (3) {
-          <div class="state">
-            <div class="badge-lock">Referral not yet linked</div>
-            <p>Referral <b>{{ ref }}</b> isn't linked to this mobile number yet. Our patient-care desk will verify it with your doctor and SMS you when your access is active.</p>
-            <button class="go" (click)="toast.show('Callback requested. The patient-care desk will call you.','ok'); close()">Request a callback</button>
-            <button class="ghost" (click)="step.set(2)">Re-enter referral number</button>
-          </div>
-        }
-      }
-      <p class="tiny" style="margin-top:12px">🔒 {{ cfg.lockNote }}</p>
+      <x-refgate [context]="lock.feature()" />
     }
   </div>
   }`,
@@ -236,94 +192,105 @@ export class LockModalComponent implements OnDestroy {
 }
 
 /* =========================================================
-   CHECKOUT — payment-gateway style sheet (card / UPI / wallet)
-   Pay → requires sign-in (lock)
+   CHECKOUT — Stripe-style payment sheet (test mode look).
+   It opens BLURRED: a referral code + mobile OTP gate sits on
+   top and never unlocks (demo of a protected payment flow).
    ========================================================= */
 @Component({
-  selector: 'x-checkout', standalone: true, imports: [FormsModule],
+  selector: 'x-checkout', standalone: true, imports: [IconComponent, FormsModule, RefGateComponent],
   template: `
   @if (lock.checkoutOpen() && lock.checkout(); as c) {
-  <div class="ov" (click)="lock.checkoutOpen.set(false)"></div>
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="co-h">
-    <button class="x" (click)="lock.checkoutOpen.set(false)" aria-label="Close checkout">✕</button>
-    <div class="co-l">
-      <div class="eb">Secure checkout</div>
-      <h2 id="co-h">{{ c.title }}</h2>
-      @if (c.lines) { <ul class="lines">@for (l of c.lines; track l[0]) {<li><span>{{ l[0] }}</span><b>{{ money(l[1], c.currency) }}</b></li>}</ul> }
-      <div class="tot"><span>Total</span><b>{{ money(c.amount, c.currency) }}</b></div>
-      <p class="tiny">PCI-DSS compliant gateway · tokenised cards · 3-D Secure</p>
-    </div>
-    <div class="co-r">
-      <div class="tabs" role="tablist" aria-label="Payment method">
-        @for (m of methods; track m) { <button role="tab" [attr.aria-selected]="m===method()" (click)="method.set(m)">{{ m }}</button> }
+  <div class="ov" (click)="close()"></div>
+  <div class="wrapx" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+    <button class="x" (click)="close()" aria-label="Close checkout"><x-ic n="x"></x-ic></button>
+    <div class="sheet veil" aria-hidden="true" inert>
+      <div class="co-l">
+        <div class="mer"><span class="back"><x-ic n="arrow-right" s="16" style="transform:rotate(180deg)"></x-ic></span><span class="mlogo">{{ cfg.brand.slice(0,1) }}</span><b>{{ cfg.brand }}</b><span class="tm">TEST MODE</span></div>
+        <p class="pay">Pay {{ cfg.brand }}</p>
+        <div class="amt">{{ money(c.amount, c.currency) }}</div>
+        <ul class="lines">
+          @for (l of (c.lines || [[c.title, c.amount]]); track $index) {
+            <li><span class="th"><x-ic n="receipt" s="18"></x-ic></span><span class="nm">{{ l[0] }}<small>Qty 1</small></span><b>{{ money(l[1], c.currency) }}</b></li>
+          }
+        </ul>
+        <div class="sum"><div><span>Subtotal</span><span>{{ money(c.amount, c.currency) }}</span></div><div><span>Tax</span><span>{{ money(0, c.currency) }}</span></div><div class="tot"><span>Total due</span><span>{{ money(c.amount, c.currency) }}</span></div></div>
+        <div class="pw">Powered by <b>stripe</b> <span>|</span> Terms <span>·</span> Privacy</div>
       </div>
-      @switch (method()) {
-        @case ('Card') {
-          <div class="card-prev" aria-hidden="true"><div class="chip"></div><div class="num">{{ fmtCard() }}</div><div class="cr"><span>{{ cname || 'CARDHOLDER NAME' }}</span><span>{{ exp || 'MM/YY' }}</span></div></div>
-          <label for="cn">Card number</label><input id="cn" inputmode="numeric" autocomplete="off" [ngModel]="card" (ngModelChange)="onCard($event)" placeholder="4242 4242 4242 4242">
-          <div class="two"><div><label for="ce">Expiry</label><input id="ce" placeholder="MM/YY" [(ngModel)]="exp" maxlength="5" autocomplete="off"></div><div><label for="cv">CVC</label><input id="cv" placeholder="•••" maxlength="4" inputmode="numeric" autocomplete="off"></div></div>
-          <label for="cnm">Name on card</label><input id="cnm" [(ngModel)]="cname" autocomplete="off">
-        }
-        @case ('UPI') {
-          <label for="upi">UPI ID</label><input id="upi" placeholder="name@bank" autocomplete="off">
-          <div class="qr" aria-label="Sample QR code area"><div></div><span>Scan with any UPI app</span></div>
-        }
-        @case ('Wallet') {
-          <div class="wal"><button type="button">Apple Pay</button><button type="button">Google Pay</button><button type="button">PayPal</button></div>
-        }
-        @case ('Bank') { <p>Pay by Interac / net-banking. You'll be redirected to your bank's secure page.</p> }
-      }
-      <button class="go" (click)="payNow()">Pay {{ money(c.amount, c.currency) }}</button>
-      <p class="tiny">Demo gateway · no real charge is made</p>
+      <div class="co-r">
+        <div class="xp"><span class="ap"><x-ic n="apple" s="18"></x-ic> Pay</span><span class="gp"><b>G</b> Pay</span><span class="lk"><b>link</b> Pay</span></div>
+        <div class="or"><span>Or pay with card</span></div>
+        <label>Email</label><div class="fx">you&#64;example.com</div>
+        <label>Card information</label>
+        <div class="cg"><div class="cn">1234 1234 1234 1234<span class="br"><i class="v">VISA</i><i class="m"><b></b><b></b></i><i class="a">AMEX</i></span></div><div class="cr"><span>MM / YY</span><span>CVC</span></div></div>
+        <label>Cardholder name</label><div class="fx">Full name on card</div>
+        <label>Country or region</label><div class="cg"><div class="cn">{{ c.currency === 'INR' ? 'India' : 'Canada' }}<x-ic n="chevron-down" s="16"></x-ic></div><div class="cn">{{ c.currency === 'INR' ? 'PIN code' : 'Postal code' }}</div></div>
+        <div class="sv"><span class="cb"></span> Securely save my information for 1-click checkout</div>
+        <div class="paybtn">Pay {{ money(c.amount, c.currency) }}</div>
+      </div>
+    </div>
+    <div class="gate">
+      <span id="gate-title" class="sr-only">Verify before payment</span>
+      <x-refgate [context]="'Secure checkout · ' + money(c.amount, c.currency)" />
     </div>
   </div>
   }`,
   styles: [`
-  .ov{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);z-index:990}
-  .sheet{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(820px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;display:grid;grid-template-columns:1fr 1.1fr;background:var(--surface);color:var(--text);border-radius:24px;z-index:991;border:1px solid var(--line);box-shadow:0 40px 120px -20px rgba(0,0,0,.5);animation:pp .35s cubic-bezier(.2,.8,.2,1)}
-  @keyframes pp{from{opacity:0;transform:translate(-50%,-46%)}}
-  .x{position:absolute;right:12px;top:12px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer;z-index:2}
-  .co-l{padding:30px;background:color-mix(in srgb,var(--primary) 9%,var(--surface));border-radius:24px 0 0 24px}
-  .co-r{padding:30px;display:grid;gap:8px;align-content:start}
-  .eb{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--primary)}
-  h2{font-family:var(--font-display);font-size:1.7rem;margin:6px 0 18px;line-height:1.1}
-  .lines{list-style:none;padding:0;margin:0 0 12px;display:grid;gap:8px}.lines li{display:flex;justify-content:space-between;gap:10px}
-  .tot{display:flex;justify-content:space-between;border-top:1.5px dashed var(--line);padding-top:12px;font-size:1.2rem}
-  .tiny{font-size:.78rem;color:var(--muted);text-align:center}
-  .tabs{display:flex;gap:6px;background:var(--bg);padding:4px;border-radius:12px;margin-bottom:8px}
-  .tabs button{flex:1;min-height:40px;border:0;border-radius:9px;background:transparent;color:var(--muted);font:600 .9rem var(--font-body);cursor:pointer}
-  .tabs button[aria-selected=true]{background:var(--surface);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.1)}
-  label{font-weight:600;font-size:.85rem}
-  input{width:100%;min-height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--text);padding:0 14px;font:inherit}
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .card-prev{height:150px;border-radius:16px;padding:18px;color:#fff;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;flex-direction:column;justify-content:space-between;margin-bottom:6px;box-shadow:0 14px 30px -12px var(--primary)}
-  .chip{width:40px;height:30px;border-radius:6px;background:linear-gradient(135deg,#f5d77a,#c79b2a)}
-  .num{font:600 1.25rem/1 monospace;letter-spacing:.12em}.cr{display:flex;justify-content:space-between;font-size:.75rem;letter-spacing:.08em}
-  .qr{display:grid;place-items:center;gap:8px;padding:12px}.qr div{width:130px;height:130px;background:repeating-conic-gradient(var(--text) 0 25%,transparent 0 50%) 0 0/18px 18px;border:10px solid var(--surface);outline:1.5px solid var(--line);border-radius:8px}
-  .wal{display:grid;gap:8px}.wal button{min-height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--text);font-weight:700;cursor:pointer}
-  .go{margin-top:10px;min-height:52px;border:0;border-radius:14px;background:var(--primary);color:var(--on-primary);font:700 1rem var(--font-body);cursor:pointer}
-  @media (max-width:720px){.sheet{grid-template-columns:1fr}.co-l{border-radius:24px 24px 0 0}}
+  .ov{position:fixed;inset:0;background:rgba(10,10,20,.55);backdrop-filter:blur(4px);z-index:990;animation:f .25s}
+  @keyframes f{from{opacity:0}}
+  .wrapx{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(940px,calc(100vw - 24px));max-height:calc(100vh - 24px);z-index:991;border-radius:22px;overflow:hidden;box-shadow:0 50px 140px -30px rgba(0,0,0,.6);animation:pp .35s cubic-bezier(.2,.8,.2,1)}
+  @keyframes pp{from{opacity:0;transform:translate(-50%,-47%) scale(.98)}}
+  .x{position:absolute;right:12px;top:12px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(0,0,0,.1);background:#fff;color:#1a1f36;cursor:pointer;z-index:5;display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+  .sheet{display:grid;grid-template-columns:1fr 1fr;background:#fff;color:#1a1f36;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif;min-height:560px}
+  .veil{filter:blur(5px) saturate(.9);pointer-events:none;user-select:none;transform:scale(1.01)}
+  .co-l{padding:34px 38px;background:#f6f8fa;display:flex;flex-direction:column;gap:6px;border-right:1px solid #e3e8ee}
+  .mer{display:flex;align-items:center;gap:10px;font-size:.92rem}.back{color:#697386}
+  .mlogo{width:26px;height:26px;border-radius:7px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;font-weight:800;font-size:.8rem}
+  .tm{font-size:.62rem;font-weight:800;letter-spacing:.06em;color:#b3093c;background:#ffde92;padding:2px 6px;border-radius:4px}
+  .pay{margin:22px 0 0;color:#697386;font-weight:600}
+  .amt{font-size:2.3rem;font-weight:700;letter-spacing:-.02em}
+  .lines{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:12px}
+  .lines li{display:grid;grid-template-columns:42px 1fr auto;gap:12px;align-items:center;font-size:.9rem}
+  .th{width:42px;height:42px;border-radius:8px;background:#fff;border:1px solid #e3e8ee;display:grid;place-items:center;color:#697386}
+  .nm{display:grid}.nm small{color:#697386}
+  .sum{margin-top:auto;display:grid;gap:8px;font-size:.88rem;border-top:1px solid #e3e8ee;padding-top:14px}
+  .sum div{display:flex;justify-content:space-between}.tot{font-weight:700;font-size:.98rem}
+  .pw{margin-top:18px;color:#a3acb9;font-size:.8rem}.pw b{color:#697386;font-weight:800}
+  .co-r{padding:34px 38px;display:grid;gap:8px;align-content:start}
+  .xp{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .xp span{display:flex;align-items:center;justify-content:center;gap:6px;height:44px;border-radius:7px;font-weight:600}
+  .ap{background:#000;color:#fff}.gp{border:1px solid #d5dbe1}.gp b{color:#4285f4}.lk{background:#00d66f;color:#011e0f}
+  .or{display:flex;align-items:center;gap:10px;color:#697386;font-size:.82rem;margin:8px 0}.or::before,.or::after{content:"";flex:1;height:1px;background:#e3e8ee}
+  label{font-size:.82rem;font-weight:600;color:#4f566b;margin-top:4px}
+  .fx,.cn,.cr span{height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;color:#a3acb9;font-size:.92rem}
+  .fx{border:1px solid #e0e6eb;border-radius:7px;box-shadow:0 1px 1px rgba(0,0,0,.03)}
+  .cg{border:1px solid #e0e6eb;border-radius:7px;overflow:hidden}.cg>.cn+.cn,.cr{border-top:1px solid #e0e6eb}
+  .cr{display:grid;grid-template-columns:1fr 1fr}.cr span+span{border-left:1px solid #e0e6eb}
+  .br{display:flex;gap:4px}.br i{font-style:normal;font-size:.55rem;font-weight:900;padding:2px 4px;border-radius:3px;display:flex;align-items:center}
+  .v{background:#1a1f71;color:#fff}.a{background:#2e77bc;color:#fff}.m{background:#f6f8fa;gap:0!important}.m b{width:9px;height:9px;border-radius:50%;background:#eb001b;display:block}.m b+b{background:#f79e1b;margin-left:-4px;opacity:.9}
+  .sv{display:flex;gap:8px;align-items:center;font-size:.82rem;color:#4f566b;margin-top:6px}.cb{width:14px;height:14px;border:1px solid #c1c9d2;border-radius:3px}
+  .paybtn{margin-top:12px;height:46px;border-radius:7px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;font-weight:700;box-shadow:0 6px 16px -6px var(--primary)}
+  .gate{position:absolute;inset:0;display:grid;place-items:center;padding:20px;overflow:auto;background:radial-gradient(60% 60% at 50% 50%,rgba(10,10,20,.25),rgba(10,10,20,.05))}
+  .gate>x-refgate{display:block;width:min(440px,100%);background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 30px 80px -20px rgba(0,0,0,.55)}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  @media (max-width:760px){.sheet{grid-template-columns:1fr}.co-r{display:none}.wrapx{height:calc(100vh - 24px)}.gate{align-items:start}}
   `]
 })
 export class CheckoutComponent {
-  lock = inject(LockService);
-  methods = ['Card', 'UPI', 'Wallet', 'Bank']; method = signal('Card');
-  card = ''; exp = ''; cname = '';
-  onCard(v: string) { this.card = (v || '').replace(/\D/g, '').slice(0, 16); }
-  fmtCard() { const d = (this.card + '••••••••••••••••').slice(0, 16); return d.replace(/(.{4})/g, '$1 ').trim(); }
+  lock = inject(LockService); cfg = inject(SITE);
+  @HostListener('document:keydown.escape') esc() { if (this.lock.checkoutOpen()) this.close(); }
+  close() { this.lock.checkoutOpen.set(false); }
   money(v: number, c: string) { return new Intl.NumberFormat(c === 'INR' ? 'en-IN' : 'en-CA', { style: 'currency', currency: c, maximumFractionDigits: 0 }).format(v); }
-  payNow() { this.lock.checkoutOpen.set(false); this.lock.gate('Payment'); }
 }
 
 /* =========================================================
    COOKIE CONSENT — banner + preferences centre
    ========================================================= */
 @Component({
-  selector: 'x-cookies', standalone: true, imports: [FormsModule],
+  selector: 'x-cookies', standalone: true, imports: [IconComponent, FormsModule],
   template: `
   @if (show() && !lock.cookiePrefsOpen()) {
     <div class="ck" role="region" aria-label="Cookie consent">
-      <div class="ck-t"><b>🍪 We value your privacy</b><p>We use essential cookies to run this site and optional cookies for analytics and personalisation. You choose.</p></div>
+      <div class="ck-t"><b><x-ic n="🍪"></x-ic> We value your privacy</b><p>We use essential cookies to run this site and optional cookies for analytics and personalisation. You choose.</p></div>
       <div class="ck-b"><button class="o" (click)="lock.cookiePrefsOpen.set(true)">Customise</button><button class="o" (click)="save(false)">Reject optional</button><button class="p" (click)="save(true)">Accept all</button></div>
     </div>
   }
@@ -374,7 +341,7 @@ export class CookieConsentComponent {
    TOASTS
    ========================================================= */
 @Component({
-  selector: 'x-toasts', standalone: true,
+  selector: 'x-toasts', standalone: true, imports: [IconComponent],
   template: `<div class="tw" role="status" aria-live="polite">@for (t of ts.items(); track t.id) {<div class="t" [class]="'t ' + t.kind">{{ t.text }}</div>}</div>`,
   styles: [`.tw{position:fixed;top:84px;right:16px;z-index:2000;display:grid;gap:8px;max-width:min(380px,calc(100vw - 32px))}
   .t{background:var(--text);color:var(--bg);padding:14px 18px;border-radius:14px;font-weight:600;box-shadow:0 14px 40px -10px rgba(0,0,0,.4);animation:in .4s cubic-bezier(.2,.8,.2,1);border-left:5px solid var(--primary)}
@@ -386,14 +353,14 @@ export class ToastsComponent { ts = inject(ToastService); }
    THEME + ACCESSIBILITY PANEL
    ========================================================= */
 @Component({
-  selector: 'x-theme', standalone: true,
+  selector: 'x-theme', standalone: true, imports: [IconComponent],
   template: `
   <button class="fab" (click)="open.set(!open())" [attr.aria-expanded]="open()" aria-controls="tp" aria-label="Theme and accessibility settings">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M12 3a9 9 0 0 1 0 18" fill="currentColor"/></svg>
   </button>
   @if (open()) {
   <div class="pn" id="tp" role="dialog" aria-label="Theme and accessibility">
-    <div class="h"><b>Appearance</b><button (click)="open.set(false)" aria-label="Close settings">✕</button></div>
+    <div class="h"><b>Appearance</b><button (click)="open.set(false)" aria-label="Close settings"><x-ic n="✕"></x-ic></button></div>
     <div class="grid">
       @for (t of th.themes; track t.id) {
         <button class="sw" [attr.aria-pressed]="th.theme()===t.id" (click)="th.theme.set(t.id)">
@@ -401,6 +368,18 @@ export class ToastsComponent { ts = inject(ToastService); }
         </button>
       }
     </div>
+    @if (th.fonts.length) {
+      <div class="h" style="margin-top:14px"><b>Typography</b><small>Premium pairings</small></div>
+      <div class="fonts" role="group" aria-label="Font pairing">
+        @for (f of th.fonts; track f.id) {
+          <button class="fo" [attr.aria-pressed]="th.font()===f.id" (click)="th.font.set(f.id)">
+            <span class="aa" [style.font-family]="f.display">Aa</span>
+            <span class="fl"><b [style.font-family]="f.display">{{ f.label.split(' + ')[0] }}</b><small [style.font-family]="f.body">with {{ f.label.split(' + ')[1] }}</small></span>
+            @if (th.font()===f.id) {<x-ic n="check-circle" s="18"></x-ic>}
+          </button>
+        }
+      </div>
+    }
     <div class="h" style="margin-top:14px"><b>Accessibility</b></div>
     <div class="row"><span>Text size</span><div class="seg"><button (click)="fs(-1)" aria-label="Smaller text">A−</button><button (click)="th.fontScale.set(1)" aria-label="Reset text size">A</button><button (click)="fs(1)" aria-label="Larger text">A+</button></div></div>
     <div class="row"><span>Reduce motion</span><button class="tg" role="switch" [attr.aria-checked]="th.reduceMotion()" (click)="th.reduceMotion.set(!th.reduceMotion())"><span></span></button></div>
@@ -412,6 +391,13 @@ export class ToastsComponent { ts = inject(ToastService); }
   @keyframes in{from{opacity:0;transform:translateY(10px)}}
   .h{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.h button{border:0;background:none;color:var(--text);font-size:18px;cursor:pointer;width:36px;height:36px}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .h small{color:var(--muted);font-size:.72rem;font-weight:600}
+  .pn{max-height:calc(100vh - 100px);overflow:auto}
+  .fonts{display:grid;gap:6px}
+  .fo{display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--text);cursor:pointer;text-align:left}
+  .fo[aria-pressed=true]{border-color:var(--primary)}.fo x-ic{color:var(--primary)}
+  .aa{width:46px;height:40px;border-radius:10px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;font-size:1.35rem;line-height:1}
+  .fl{display:grid;line-height:1.2;min-width:0}.fl b{font-size:.98rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fl small{color:var(--muted);font-size:.74rem}
   .sw{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 10px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--text);font:600 .85rem var(--font-body);cursor:pointer;text-align:left}
   .sw[aria-pressed=true]{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 25%,transparent)}
   .dots{display:flex}.dots i{width:14px;height:14px;border-radius:50%;margin-right:-4px;border:2px solid var(--surface)}
@@ -423,6 +409,7 @@ export class ToastsComponent { ts = inject(ToastService); }
 })
 export class ThemePickerComponent {
   th = inject(ThemeService); open = signal(false);
+  constructor() { effect(() => { if (this.open()) this.th.fonts.forEach(f => this.th.loadFont(f.id)); }); }
   fs(d: number) { this.th.fontScale.set(Math.min(1.3, Math.max(.9, +(this.th.fontScale() + d * .1).toFixed(1)))); }
 }
 
@@ -431,7 +418,7 @@ export class ThemePickerComponent {
    ========================================================= */
 export interface SearchItem { title: string; type: string; route: string; text?: string; }
 @Component({
-  selector: 'x-search', standalone: true, imports: [FormsModule],
+  selector: 'x-search', standalone: true, imports: [IconComponent, FormsModule],
   template: `
   @if (lock.searchOpen()) {
   <div class="ov" (click)="close()"></div>
@@ -496,16 +483,16 @@ export class SearchOverlayComponent {
 export interface BotIntent { keys: string[]; reply: string; chips?: string[]; route?: string; lock?: string; }
 interface Msg { me: boolean; text: string; chips?: string[]; }
 @Component({
-  selector: 'x-bot', standalone: true, imports: [FormsModule],
+  selector: 'x-bot', standalone: true, imports: [IconComponent, FormsModule],
   template: `
   <button class="fab" (click)="toggle()" [attr.aria-expanded]="open()" aria-controls="bot" [attr.aria-label]="open() ? 'Close assistant' : 'Open ' + name">
-    @if (!open()) { <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8 12h.01M12 12h.01M16 12h.01" stroke-linecap="round" stroke-width="3"/></svg> } @else { ✕ }
+    @if (!open()) { <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8 12h.01M12 12h.01M16 12h.01" stroke-linecap="round" stroke-width="3"/></svg> } @else { <x-ic n="✕"></x-ic> }
     @if (!open() && !seen()) { <span class="ping" aria-hidden="true"></span> }
   </button>
   @if (!open() && !seen()) { <div class="hint" aria-hidden="true">{{ hint }}</div> }
   @if (open()) {
   <section class="bot" id="bot" role="dialog" [attr.aria-label]="name">
-    <header><div class="av" aria-hidden="true">{{ avatar }}</div><div><b>{{ name }}</b><small><i></i> Online · replies instantly</small></div></header>
+    <header><div class="av" aria-hidden="true"><x-ic [n]="avatar" s="22"></x-ic></div><div><b>{{ name }}</b><small><i></i> Online · replies instantly</small></div></header>
     <div class="log" #log aria-live="polite">
       @for (m of msgs(); track $index) {
         <div class="m" [class.me]="m.me">{{ m.text }}</div>
@@ -513,7 +500,7 @@ interface Msg { me: boolean; text: string; chips?: string[]; }
       }
       @if (typing()) { <div class="m typing" aria-label="Assistant is typing"><span></span><span></span><span></span></div> }
     </div>
-    <form (ngSubmit)="send(text)"><label class="sr-only" for="bot-in">Message</label><input id="bot-in" [(ngModel)]="text" name="t" placeholder="Type your question…" autocomplete="off"><button aria-label="Send">➤</button></form>
+    <form (ngSubmit)="send(text)"><label class="sr-only" for="bot-in">Message</label><input id="bot-in" [(ngModel)]="text" name="t" placeholder="Type your question…" autocomplete="off"><button aria-label="Send"><x-ic n="➤"></x-ic></button></form>
   </section>
   }`,
   styles: [`

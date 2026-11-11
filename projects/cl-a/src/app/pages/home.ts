@@ -3,9 +3,10 @@ import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { LockService, RevealDirective, TiltDirective } from '@shared/core';
 import { EVENTS, IMG, JOURNEY, PARTNERS, PROGRAMS, RESOURCES, STORIES } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, DatePipe, RevealDirective, TiltDirective],
+  standalone: true, imports: [IconComponent, RouterLink, DatePipe, RevealDirective, TiltDirective],
   template: `
   <!-- HERO -->
   <section class="hero" aria-labelledby="h1">
@@ -64,7 +65,7 @@ import { EVENTS, IMG, JOURNEY, PARTNERS, PROGRAMS, RESOURCES, STORIES } from '..
           }
         </div>
         <div class="j-panel" id="jp" role="tabpanel" (mouseenter)="paused.set(true)" (mouseleave)="paused.set(false)">
-          <div class="j-ic" aria-hidden="true">{{ journey[step()].icon }}</div>
+          <div class="j-ic" aria-hidden="true"><x-ic [n]="journey[step()].icon"></x-ic></div>
           <h3 class="display">{{ journey[step()].t }}</h3>
           <p>{{ journey[step()].d }}</p>
           <a class="btn btn-p" [routerLink]="jRoutes[step()]">Start here</a>
@@ -91,7 +92,7 @@ import { EVENTS, IMG, JOURNEY, PARTNERS, PROGRAMS, RESOURCES, STORIES } from '..
 
   <!-- MARQUEE -->
   <div class="mq" aria-hidden="true"><div class="mq-t">
-    @for (w of words; track $index) { <span class="display">{{ w }}</span><i>✿</i> }
+    @for (w of words; track $index) { <span class="display">{{ w }}</span><i><x-ic n="✿"></x-ic></i> }
   </div></div>
 
   <!-- EVENTS rail -->
@@ -130,7 +131,7 @@ import { EVENTS, IMG, JOURNEY, PARTNERS, PROGRAMS, RESOURCES, STORIES } from '..
       <div class="sec-h" reveal><div><div class="eyebrow">Resource library</div><h2 id="h-r">Tools you can <em>use on Monday</em></h2></div><a class="btn btn-l" routerLink="/resources">Browse all resources</a></div>
       <div class="res-g">
         @for (r of resources; track r.id; let i = $index) {
-          <a class="rc card" routerLink="/resources" [reveal]="i*70"><span class="chip">{{ r.type }}</span><h3>{{ r.title }}</h3><p>{{ r.blurb }}</p><span class="m">{{ r.mins }} min · {{ r.access === 'Members' ? '🔒 Members' : 'Free' }}</span></a>
+          <a class="rc card" routerLink="/resources" [reveal]="i*70"><span class="chip">{{ r.type }}</span><h3>{{ r.title }}</h3><p>{{ r.blurb }}</p><span class="m">{{ r.mins }} min · @if (r.access === 'Members') {<x-ic n="lock"></x-ic> Members} @else {Free}</span></a>
         }
         <div class="lounge" reveal="200">
           <div class="eyebrow light">Members' Lounge</div>

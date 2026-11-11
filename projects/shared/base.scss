@@ -31,7 +31,7 @@ html.rm .rv{opacity:1;transform:none}
 .btn-a{background:var(--accent);color:var(--on-accent,#fff)}
 .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:.8rem;font-weight:700;background:color-mix(in srgb,var(--primary) 12%,transparent);color:var(--primary)}
 .eyebrow{font-size:.78rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--primary)}
-.lock-ic::after{content:"🔒";font-size:.8em;margin-left:6px}
+
 input,select,textarea{border-radius:12px}
 .field{min-width:0}
 .field input,.field select,.field textarea{width:100%;min-width:0}

@@ -2,9 +2,10 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LockService, RevealDirective, TiltDirective } from '@shared/core';
 import { EXPERIENCES, Exp } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [FormsModule, RevealDirective, TiltDirective],
+  standalone: true, imports: [IconComponent, FormsModule, RevealDirective, TiltDirective],
   template: `
   <section class="page-top"><div class="wrap"><span class="kick">Experiences &amp; stays</span><h1>Find your <span class="serif grad-text">place</span></h1><p>Filter by mood, budget and dates. Live availability, secure checkout and member rates.</p></div></section>
   <section class="wrap" style="padding-bottom:110px">
@@ -19,10 +20,10 @@ import { EXPERIENCES, Exp } from '../data';
     <div class="g">
       @for (e of list(); track e.id; let i = $index) {
         <article class="c card" tilt [reveal]="(i%3)*70">
-          <div class="im"><img [src]="e.img" alt="" loading="lazy">@if (e.tag) {<span class="tg">{{ e.tag }}</span>}<button class="hrt" (click)="lock.gate('Wishlist')" [attr.aria-label]="'Save ' + e.title">♡</button></div>
+          <div class="im"><img [src]="e.img" alt="" loading="lazy">@if (e.tag) {<span class="tg">{{ e.tag }}</span>}<button class="hrt" (click)="lock.gate('Wishlist')" [attr.aria-label]="'Save ' + e.title"><x-ic n="♡"></x-ic></button></div>
           <div class="b"><small>{{ e.cat }} · {{ e.place }}</small><h2>{{ e.title }}</h2>
             <div class="f"><span><b>{{ '$' + e.price }}</b> {{ e.nights ? '/ night' : '/ person' }}</span><button class="btn btn-p" (click)="book(e)">Reserve</button></div>
-            <button class="mr" (click)="lock.gate('Member rate')">🔒 Member rate available</button></div>
+            <button class="mr" (click)="lock.gate('Member rate')"><x-ic n="🔒"></x-ic> Member rate available</button></div>
         </article>
       } @empty {<p>No experiences match. Try raising the price or another category.</p>}
     </div>

@@ -3,9 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LockService, RevealDirective } from '@shared/core';
 import { IMG } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [FormsModule, RouterLink, RevealDirective],
+  standalone: true, imports: [IconComponent, FormsModule, RouterLink, RevealDirective],
   template: `
   <section class="page-hero"><img [src]="img.hero" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Donate</span></nav>
@@ -26,7 +27,7 @@ import { IMG } from '../data';
         <label class="ck"><input type="checkbox" name="fee" [(ngModel)]="fees"> Add {{ '$' + feeAmt() }} to cover processing fees</label>
         <label class="ck"><input type="checkbox" name="anon"> Keep my gift anonymous</label>
         <button class="btn btn-p big">Give {{ '$' + total() }} {{ freq()==='One-time' ? '' : freq().toLowerCase() }}</button>
-        <p class="sec-n">🔒 Secure, PCI-compliant payment · Apple Pay · Google Pay · cards</p>
+        <p class="sec-n"><x-ic n="🔒"></x-ic> Secure, PCI-compliant payment · Apple Pay · Google Pay · cards</p>
       </form>
       <div class="side">
         <div class="card goal" reveal="100">
@@ -37,7 +38,7 @@ import { IMG } from '../data';
         </div>
         <div class="card ways" reveal="180">
           <h3 class="display">Other ways to give</h3>
-          @for (w of ways; track w[0]) { <button (click)="lock.gate(w[0])"><span aria-hidden="true">{{ w[1] }}</span><b>{{ w[0] }}</b><small>{{ w[2] }}</small></button> }
+          @for (w of ways; track w[0]) { <button (click)="lock.gate(w[0])"><span aria-hidden="true"><x-ic [n]="w[1]"></x-ic></span><b>{{ w[0] }}</b><small>{{ w[2] }}</small></button> }
         </div>
       </div>
     </div>

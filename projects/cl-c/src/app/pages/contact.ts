@@ -3,9 +3,10 @@ import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { RevealDirective, ToastService } from '@shared/core';
 import { H, IMG } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, FormsModule, RevealDirective],
+  standalone: true, imports: [IconComponent, RouterLink, FormsModule, RevealDirective],
   template: `
   <section class="page-hero"><img [src]="img.building" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Contact</span></nav>
@@ -13,8 +14,8 @@ import { H, IMG } from '../data';
   </section>
   <section class="sec"><div class="wrap g">
     <div class="cards">
-      @for (c of contacts; track c[1]; let i = $index) {<div class="c card" [reveal]="i*50"><span aria-hidden="true">{{ c[0] }}</span><div><b>{{ c[1] }}</b><p>{{ c[2] }}</p></div></div>}
-      <div class="map" reveal aria-label="Map placeholder"><span>📍</span><b>{{ h.address }}</b><a class="btn btn-p" href="https://maps.google.com/?q=Ludhiana+Punjab" target="_blank" rel="noopener">Get directions</a></div>
+      @for (c of contacts; track c[1]; let i = $index) {<div class="c card" [reveal]="i*50"><span aria-hidden="true"><x-ic [n]="c[0]" s="22"></x-ic></span><div><b>{{ c[1] }}</b><p>{{ c[2] }}</p></div></div>}
+      <div class="map" reveal aria-label="Map placeholder"><span><x-ic n="📍"></x-ic></span><b>{{ h.address }}</b><a class="btn btn-p" href="https://maps.google.com/?q=Ludhiana+Punjab" target="_blank" rel="noopener">Get directions</a></div>
     </div>
     <form class="card f" (ngSubmit)="send()" reveal="100">
       <h2>Send an enquiry</h2>

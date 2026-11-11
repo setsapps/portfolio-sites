@@ -3,14 +3,15 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LockService, RevealDirective, ToastService } from '@shared/core';
 import { IMG, JOBS, Job } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [FormsModule, RouterLink, RevealDirective],
+  standalone: true, imports: [IconComponent, FormsModule, RouterLink, RevealDirective],
   template: `
   <section class="page-hero"><img [src]="img.hotel" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Job board</span></nav>
       <h1 class="display">Careers that <em>move</em> you</h1><p>Roles from employers who are committed to women's advancement. Every posting is reviewed by our team before it goes live.</p>
-      <div class="hero-b"><button class="btn btn-p" (click)="post.set(true)">Post a job</button><button class="btn btn-o" style="color:#fff" (click)="lock.gate('Job alerts')">🔔 Create job alert</button></div>
+      <div class="hero-b"><button class="btn btn-p" (click)="post.set(true)">Post a job</button><button class="btn btn-o" style="color:#fff" (click)="lock.gate('Job alerts')"><x-ic n="🔔"></x-ic> Create job alert</button></div>
     </div>
   </section>
   <section class="sec" style="padding-top:50px">
@@ -28,7 +29,7 @@ import { IMG, JOBS, Job } from '../data';
             <article class="job card" [class.sel]="sel()?.id===j.id" [reveal]="i*40">
               <div class="lg" aria-hidden="true" [style.background]="tone(j.id)">{{ j.org[7] || j.org[0] }}</div>
               <div class="jb"><h2><button class="tl" (click)="sel.set(j)">{{ j.title }}</button></h2><p>{{ j.org }} · {{ j.city }}</p>
-                <div class="tags"><span>{{ j.type }}</span><span>{{ j.sector }}</span><span>{{ j.salary }}</span>@if (j.featured) {<span class="ft">★ Featured</span>}</div></div>
+                <div class="tags"><span>{{ j.type }}</span><span>{{ j.sector }}</span><span>{{ j.salary }}</span>@if (j.featured) {<span class="ft"><x-ic n="★"></x-ic> Featured</span>}</div></div>
               <div class="jr"><small>{{ j.days }}d ago</small><button class="btn btn-l" (click)="sel.set(j)">View</button></div>
             </article>
           } @empty { <p class="card" style="padding:30px;text-align:center">No roles match your search.</p> }
@@ -43,8 +44,8 @@ import { IMG, JOBS, Job } from '../data';
             <p>Sample description. The employer's full posting appears here with responsibilities, requirements, benefits and how to apply.</p>
             <h3>Why this employer</h3>
             <p>Signed the CL-A employer pledge on flexible scheduling and transparent pay ranges.</p>
-            <div class="da"><button class="btn btn-p" (click)="lock.gate('Apply with your CL-A profile')">Apply with CL-A profile</button><button class="btn btn-l" (click)="toast.show('Job saved to your list','ok')">♡ Save</button></div>
-          } @else { <div class="ph"><div aria-hidden="true">💼</div><p>Select a role to see the details.</p></div> }
+            <div class="da"><button class="btn btn-p" (click)="lock.gate('Apply with your CL-A profile')">Apply with CL-A profile</button><button class="btn btn-l" (click)="toast.show('Job saved to your list','ok')"><x-ic n="♡"></x-ic> Save</button></div>
+          } @else { <div class="ph"><div aria-hidden="true"><x-ic n="💼"></x-ic></div><p>Select a role to see the details.</p></div> }
         </aside>
       </div>
     </div>
@@ -53,7 +54,7 @@ import { IMG, JOBS, Job } from '../data';
   @if (post()) {
     <div class="ov" (click)="post.set(false)"></div>
     <div class="pm" role="dialog" aria-modal="true" aria-labelledby="pj">
-      <button class="x" (click)="post.set(false)" aria-label="Close">✕</button>
+      <button class="x" (click)="post.set(false)" aria-label="Close"><x-ic n="✕"></x-ic></button>
       <ol class="st" aria-label="Steps">@for (s of ['Role','Details','Plan','Review']; track s; let i = $index) {<li [class.on]="i<=pstep()">{{ s }}</li>}</ol>
       <h2 id="pj" class="display">Post a job</h2>
       @switch (pstep()) {

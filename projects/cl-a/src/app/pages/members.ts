@@ -2,9 +2,10 @@ import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LockService, RevealDirective } from '@shared/core';
 import { IMG } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, RevealDirective],
+  standalone: true, imports: [IconComponent, RouterLink, RevealDirective],
   template: `
   <section class="page-hero"><img [src]="img.network" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Members’ Lounge</span></nav>
@@ -22,14 +23,14 @@ import { IMG } from '../data';
         </div>
       </div>
       <div class="gate">
-        <div class="lk" aria-hidden="true">🔒</div>
+        <div class="lk" aria-hidden="true"><x-ic n="🔒"></x-ic></div>
         <h2 class="display">Members only</h2>
         <p>Sign in with your member account, Google or LinkedIn to enter the Lounge.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn btn-p" (click)="lock.gate('Members’ Lounge')">Sign in</button><a class="btn btn-l" routerLink="/membership">Become a member</a></div>
       </div>
     </div>
     <div class="wrap feats">
-      @for (f of feats; track f[0]; let i = $index) { <div class="ft card" [reveal]="i*60"><span aria-hidden="true">{{ f[0] }}</span><h3>{{ f[1] }}</h3><p>{{ f[2] }}</p></div> }
+      @for (f of feats; track f[0]; let i = $index) { <div class="ft card" [reveal]="i*60"><span aria-hidden="true"><x-ic [n]="f[0]"></x-ic></span><h3>{{ f[1] }}</h3><p>{{ f[2] }}</p></div> }
     </div>
   </section>
   `,

@@ -3,9 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { RevealDirective, ToastService } from '@shared/core';
 import { BRAND, IMG } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [FormsModule, RouterLink, RevealDirective],
+  standalone: true, imports: [IconComponent, FormsModule, RouterLink, RevealDirective],
   template: `
   <section class="page-hero"><img [src]="img.hero2" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Contact</span></nav>
@@ -23,10 +24,10 @@ import { BRAND, IMG } from '../data';
         <button class="btn btn-p">Send message</button>
       </form>
       <div class="info">
-        <div class="card ic" reveal="80"><span aria-hidden="true">✉</span><div><b>Email</b><p>{{ brand.email }}</p></div></div>
-        <div class="card ic" reveal="140"><span aria-hidden="true">📍</span><div><b>Office</b><p>{{ brand.city }} · by appointment</p></div></div>
-        <div class="card ic" reveal="200"><span aria-hidden="true">🕒</span><div><b>Hours</b><p>Mon–Fri, 9:00–17:00 PT</p></div></div>
-        <div class="map" reveal="260" aria-label="Map placeholder"><div class="pin">📍</div></div>
+        <div class="card ic" reveal="80"><span aria-hidden="true"><x-ic n="✉"></x-ic></span><div><b>Email</b><p>{{ brand.email }}</p></div></div>
+        <div class="card ic" reveal="140"><span aria-hidden="true"><x-ic n="📍"></x-ic></span><div><b>Office</b><p>{{ brand.city }} · by appointment</p></div></div>
+        <div class="card ic" reveal="200"><span aria-hidden="true"><x-ic n="🕒"></x-ic></span><div><b>Hours</b><p>Mon–Fri, 9:00–17:00 PT</p></div></div>
+        <div class="map" reveal="260" aria-label="Map placeholder"><div class="pin"><x-ic n="📍"></x-ic></div></div>
       </div>
     </div>
   </section>

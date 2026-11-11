@@ -21,6 +21,7 @@ function simplex(x: number, y: number) {
   g = grad[perm[ii + 1 + perm[jj + 1]] & 7]; n += c(g[0], g[1], x2, y2);
   return 70 * n;
 }
+function dotTexture() { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d')!; const r = g.createRadialGradient(32, 32, 0, 32, 32, 32); r.addColorStop(0, 'rgba(255,255,255,1)'); r.addColorStop(.35, 'rgba(255,255,255,.85)'); r.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = r; g.beginPath(); g.arc(32, 32, 32, 0, Math.PI * 2); g.fill(); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; }
 const fbm = (x: number, y: number) => { let a = 0, f = 1, amp = 1; for (let o = 0; o < 5; o++) { a += amp * simplex(x * f, y * f); f *= 2.03; amp *= .5; } return a; };
 
 // Terrain height: valley along z with a lake basin near origin, ridges on the sides
@@ -62,11 +63,11 @@ export class Journey {
     // camera rail: high aerial approach → glide over lake → lodge → rise for aurora → settle
     this.path = new THREE.CatmullRomCurve3([
       new THREE.Vector3(0, 60, 150), new THREE.Vector3(-8, 38, 80), new THREE.Vector3(6, 18, 20), new THREE.Vector3(-4, 7, -20),
-      new THREE.Vector3(10, 5, -55), new THREE.Vector3(22, 6, -78), new THREE.Vector3(14, 16, -100), new THREE.Vector3(0, 26, -120), new THREE.Vector3(-6, 30, -135),
+      new THREE.Vector3(2, 6, -48), new THREE.Vector3(4, 7, -64), new THREE.Vector3(-2, 14, -82), new THREE.Vector3(-8, 24, -102), new THREE.Vector3(-12, 30, -116),
     ]);
     this.look = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0, 10, 0), new THREE.Vector3(0, 6, -40), new THREE.Vector3(0, 2, -50), new THREE.Vector3(12, 3, -70),
-      new THREE.Vector3(26, 4, -88), new THREE.Vector3(30, 6, -96), new THREE.Vector3(0, 40, -260), new THREE.Vector3(0, 60, -320), new THREE.Vector3(0, 70, -340),
+      new THREE.Vector3(0, 10, 0), new THREE.Vector3(0, 6, -40), new THREE.Vector3(0, 2, -50), new THREE.Vector3(14, 3, -76),
+      new THREE.Vector3(28, 4, -92), new THREE.Vector3(30, 6, -95), new THREE.Vector3(10, 40, -260), new THREE.Vector3(0, 60, -320), new THREE.Vector3(0, 70, -340),
     ]);
     addEventListener('resize', this.resize); addEventListener('pointermove', this.pm, { passive: true });
     this.resize();
@@ -87,7 +88,7 @@ export class Journey {
     const sg = new THREE.BufferGeometry(); const n = 2200; const sp = new Float32Array(n * 3);
     for (let i = 0; i < n; i++) { const th = Math.random() * Math.PI * 2, ph = Math.acos(Math.random() * .9 + .1), R = 600; sp.set([R * Math.sin(ph) * Math.cos(th), R * Math.cos(ph), R * Math.sin(ph) * Math.sin(th)], i * 3); }
     sg.setAttribute('position', new THREE.BufferAttribute(sp, 3));
-    this.stars = new THREE.Points(sg, new THREE.PointsMaterial({ color: 0xffffff, size: 1.6, sizeAttenuation: false, transparent: true, opacity: 0, fog: false, depthWrite: false }));
+    this.stars = new THREE.Points(sg, new THREE.PointsMaterial({ color: 0xffffff, size: 2.4, sizeAttenuation: false, map: dotTexture(), alphaTest: .02, transparent: true, opacity: 0, fog: false, depthWrite: false }));
     this.scene.add(this.stars);
     // aurora ribbon
     this.aurora = new THREE.Mesh(new THREE.PlaneGeometry(700, 160, 120, 1), new THREE.ShaderMaterial({
@@ -162,7 +163,7 @@ export class Journey {
     // fireflies / lantern sparks near lodge
     const fg = new THREE.BufferGeometry(); const fp = new Float32Array(300 * 3); for (let i = 0; i < 300; i++) fp.set([20 + Math.random() * 30, 1 + Math.random() * 8, -110 + Math.random() * 35], i * 3);
     fg.setAttribute('position', new THREE.BufferAttribute(fp, 3));
-    this.flies = new THREE.Points(fg, new THREE.PointsMaterial({ color: '#ffd08a', size: .35, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
+    this.flies = new THREE.Points(fg, new THREE.PointsMaterial({ color: '#ffd08a', size: .45, map: dotTexture(), alphaTest: .02, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending }));
     this.scene.add(this.flies);
   }
   private pm = (e: PointerEvent) => { this.mt.set(e.clientX / innerWidth - .5, e.clientY / innerHeight - .5); };

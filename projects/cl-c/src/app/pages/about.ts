@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { RevealDirective } from '@shared/core';
 import { IMG } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, RevealDirective],
+  standalone: true, imports: [IconComponent, RouterLink, RevealDirective],
   template: `
   <section class="page-hero"><img [src]="img.building" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>About</span></nav>
@@ -12,11 +13,11 @@ import { IMG } from '../data';
   </section>
   <section class="sec"><div class="wrap two">
     <div reveal><div class="eyebrow">Our promise</div><h2 class="h">Vision &amp; values</h2><p class="muted">Content placeholder for the hospital's vision and history. The client supplies founding year, milestones and leadership.</p></div>
-    <div class="vg">@for (v of values; track v[0]; let i = $index) {<div class="v card" [reveal]="i*60"><span aria-hidden="true">{{ v[0] }}</span><b>{{ v[1] }}</b><p>{{ v[2] }}</p></div>}</div>
+    <div class="vg">@for (v of values; track v[0]; let i = $index) {<div class="v card" [reveal]="i*60"><span aria-hidden="true"><x-ic [n]="v[0]" s="28"></x-ic></span><b>{{ v[1] }}</b><p>{{ v[2] }}</p></div>}</div>
   </div></section>
   <section class="sec bg"><div class="wrap">
     <div class="eyebrow" reveal>Facilities</div><h2 class="h" reveal>Under one roof</h2>
-    <div class="fg">@for (f of facilities; track f[1]; let i = $index) {<div class="f card" [reveal]="(i%4)*50"><span aria-hidden="true">{{ f[0] }}</span>{{ f[1] }}</div>}</div>
+    <div class="fg">@for (f of facilities; track f[1]; let i = $index) {<div class="f card" [reveal]="(i%4)*50"><span aria-hidden="true"><x-ic [n]="f[0]" s="24"></x-ic></span>{{ f[1] }}</div>}</div>
     <p class="muted" style="margin-top:14px">Facility list to be confirmed by the hospital.</p>
   </div></section>`,
   styles: [`

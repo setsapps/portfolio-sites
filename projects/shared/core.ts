@@ -9,9 +9,12 @@ export const store = {
 
 /* ---------- themes ---------- */
 export interface ThemeDef { id: string; label: string; swatch: [string, string, string]; dark?: boolean; }
+export interface FontDef { id: string; label: string; display: string; body: string; href?: string; }
 export interface SiteConfig {
   key: string;                      // storage namespace
   brand: string;
+  dial?: string;                    // phone country code shown in the OTP step
+  fonts?: FontDef[];                // premium font pairings (first = default, already loaded)
   themes: ThemeDef[];
   lockMode: 'email' | 'otp-referral';
   lockTitle: string;
@@ -28,7 +31,21 @@ export class ThemeService {
   readonly fontScale = signal<number>(+(store.get(this.cfg.key + ':fs') || 1));
   readonly reduceMotion = signal<boolean>(store.get(this.cfg.key + ':rm') === '1' ||
     (typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches));
+  readonly fonts = this.cfg.fonts || [];
+  readonly font = signal<string>(store.get(this.cfg.key + ':font') || this.fonts[0]?.id || '');
+  /** inject Google Fonts stylesheets on demand (for previews in the picker and for the chosen pair) */
+  loadFont(id: string) {
+    const f = this.fonts.find(x => x.id === id); if (!f?.href) return;
+    const lid = 'font-' + f.id; if (this.doc.getElementById(lid)) return;
+    const l = this.doc.createElement('link'); l.id = lid; l.rel = 'stylesheet'; l.href = f.href; this.doc.head.appendChild(l);
+  }
   constructor() {
+    effect(() => {
+      const f = this.fonts.find(x => x.id === this.font()); const st = this.doc.documentElement.style;
+      if (!f || f.id === this.fonts[0]?.id) { st.removeProperty('--font-display'); st.removeProperty('--font-body'); }
+      else { this.loadFont(f.id); st.setProperty('--font-display', f.display); st.setProperty('--font-body', f.body); }
+      if (f) store.set(this.cfg.key + ':font', f.id);
+    });
     effect(() => {
       const t = this.theme(); const html = this.doc.documentElement;
       html.setAttribute('data-theme', t);

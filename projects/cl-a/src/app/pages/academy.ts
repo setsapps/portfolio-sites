@@ -2,9 +2,10 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LockService, RevealDirective, TiltDirective } from '@shared/core';
 import { COURSES, Course, IMG } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, RevealDirective, TiltDirective],
+  standalone: true, imports: [IconComponent, RouterLink, RevealDirective, TiltDirective],
   template: `
   <section class="page-hero"><img [src]="img.academy" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Learning Studio</span></nav>
@@ -29,9 +30,9 @@ import { COURSES, Course, IMG } from '../data';
       <div class="cg">
         @for (c of list(); track c.id; let i = $index) {
           <article class="co card" tilt [reveal]="(i%4)*60">
-            <div class="cv" [style.background]="cover(c.id)"><span class="lv">{{ c.level }}</span><span class="glyph" aria-hidden="true">{{ glyph(c.topic) }}</span></div>
+            <div class="cv" [style.background]="cover(c.id)"><span class="lv">{{ c.level }}</span><span class="glyph" aria-hidden="true"><x-ic [n]="glyph(c.topic)" s="56" w="1.4"></x-ic></span></div>
             <div class="cb"><small>{{ c.topic }} · {{ c.format }}</small><h3>{{ c.title }}</h3>
-              <div class="mt"><span>⏱ {{ c.hours }}h</span><span>▶ {{ c.lessons }} lessons</span><span>🎓 Certificate</span></div>
+              <div class="mt"><span><x-ic n="⏱"></x-ic> {{ c.hours }}h</span><span><x-ic n="▶"></x-ic> {{ c.lessons }} lessons</span><span><x-ic n="🎓"></x-ic> Certificate</span></div>
               <div class="cf"><b>{{ c.price ? ('$' + c.price) : 'Free' }}</b><button class="btn btn-p" (click)="enrol(c)">{{ c.price ? 'Enrol' : 'Start free' }}<span class="sr-only">: {{ c.title }}</span></button></div></div>
           </article>
         }

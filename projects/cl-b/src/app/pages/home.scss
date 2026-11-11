@@ -19,7 +19,7 @@
 .hb{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
 .hero .btn-o,.cta-sec .btn-o{color:#fff}
 .chap{position:absolute;left:max(24px,calc((100vw - var(--max))/2 + 24px));bottom:14vh;width:min(520px,calc(100vw - 48px));padding:30px;border-radius:28px;color:#fff;background:rgba(10,8,16,.42);backdrop-filter:blur(20px) saturate(1.3);border:1px solid rgba(255,255,255,.16);opacity:0;transform:translateY(40px) scale(.98);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1);pointer-events:none}
-.chap.right{left:auto;right:max(90px,calc((100vw - var(--max))/2 + 90px))}
+.chap.right{left:auto;right:max(24px,calc((100vw - var(--max))/2 + 24px))}
 .chap.on{opacity:1;transform:none;pointer-events:auto}
 .chap .n{font:600 .78rem var(--font-body);letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
 .chap h2{font-size:clamp(2rem,4.2vw,3.4rem);line-height:.95;letter-spacing:-.035em;text-transform:uppercase;margin:12px 0}
@@ -32,12 +32,12 @@
 .rail button.on{color:#fff}.rail button.on i{background:var(--primary);border-color:var(--primary);box-shadow:0 0 14px var(--primary);transform:scale(1.3)}
 .bar{position:absolute;right:4px;top:0;bottom:0;width:2px;background:rgba(255,255,255,.15);z-index:-1}
 .bar i{display:block;height:100%;background:var(--grad);transform-origin:top}
-.hud{position:absolute;left:24px;bottom:22px;display:flex;gap:14px;color:rgba(255,255,255,.75);font:600 .75rem var(--font-body);letter-spacing:.18em;text-transform:uppercase}
+.hud{position:absolute;left:88px;bottom:30px;display:flex;gap:14px;color:rgba(255,255,255,.75);font:600 .75rem var(--font-body);letter-spacing:.18em;text-transform:uppercase}
 .mode{position:absolute;right:24px;bottom:22px;display:flex;padding:4px;border-radius:999px}
 .mode button{min-height:36px;padding:0 14px;border:0;border-radius:999px;background:transparent;color:#fff;font-weight:600;cursor:pointer}
 .mode button[aria-pressed=true]{background:#fff;color:#111}
 .pause{position:absolute;right:24px;top:96px;width:42px;height:42px;border-radius:50%;color:#fff;cursor:pointer;font-size:.8rem}
-@media (max-width:760px){.chap,.chap.right{left:16px;right:16px;width:auto;bottom:90px;padding:22px}.rail button span{display:none}.rail{right:12px}.hud{left:16px;bottom:16px}.pause{top:84px;right:12px}}
+@media (max-width:760px){.chap,.chap.right{left:16px;right:16px;width:auto;bottom:90px;padding:22px}.rail button span{display:none}.rail{right:12px}.hud{left:80px;bottom:28px}.pause{top:84px;right:12px}}
 /* experiences bento */
 .xg{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:260px;gap:16px}
 .xc{position:relative;border-radius:26px;overflow:hidden;isolation:isolate;display:flex;align-items:flex-end;color:#fff;transition:transform .4s cubic-bezier(.2,.8,.2,1)}

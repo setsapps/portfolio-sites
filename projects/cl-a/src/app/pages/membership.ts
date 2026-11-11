@@ -2,9 +2,10 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LockService, RevealDirective, TiltDirective } from '@shared/core';
 import { IMG } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, RevealDirective, TiltDirective],
+  standalone: true, imports: [IconComponent, RouterLink, RevealDirective, TiltDirective],
   template: `
   <section class="page-hero"><img [src]="img.team" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Membership</span></nav>
@@ -21,7 +22,7 @@ import { IMG } from '../data';
             @if (p.hot) {<span class="badge">Recommended</span>}
             <div class="eyebrow">{{ p.who }}</div><h2 class="display">{{ p.n }}</h2>
             <div class="pr"><b>{{ price(p) }}</b><span>{{ p.m ? (yearly() ? '/ year' : '/ month') : '' }}</span></div>
-            <ul>@for (f of p.f; track f) {<li>✓ {{ f }}</li>}</ul>
+            <ul>@for (f of p.f; track f) {<li><x-ic n="✓"></x-ic> {{ f }}</li>}</ul>
             <button class="btn" [class.btn-p]="p.hot" [class.btn-l]="!p.hot" (click)="join(p)">{{ p.m ? 'Join as ' + p.n : 'Create free account' }}</button>
           </div>
         }
@@ -29,7 +30,7 @@ import { IMG } from '../data';
       <div class="cmp card" reveal>
         <table><caption class="sr-only">Compare membership plans</caption>
           <thead><tr><th scope="col">Benefit</th>@for (p of plans; track p.n) {<th scope="col">{{ p.n }}</th>}</tr></thead>
-          <tbody>@for (r of rows; track r[0]) {<tr><th scope="row">{{ r[0] }}</th>@for (c of r.slice(1); track $index) {<td>{{ c }}</td>}</tr>}</tbody>
+          <tbody>@for (r of rows; track r[0]) {<tr><th scope="row">{{ r[0] }}</th>@for (c of r.slice(1); track $index) {<td>@if (c==='✓') {<x-ic n="check" style="color:var(--primary)"></x-ic><span class="sr-only">Included</span>} @else {{{ c }}}</td>}</tr>}</tbody>
         </table>
       </div>
       <div class="faq" reveal>

@@ -3,9 +3,10 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LockService, RevealDirective, ToastService } from '@shared/core';
 import { DOCTORS, Doctor, IMG, SPECIALITIES } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, FormsModule, RevealDirective],
+  standalone: true, imports: [IconComponent, RouterLink, FormsModule, RevealDirective],
   template: `
   <section class="page-hero"><img [src]="img.care" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Book Appointment</span></nav>
@@ -18,8 +19,8 @@ import { DOCTORS, Doctor, IMG, SPECIALITIES } from '../data';
         @switch (step()) {
           @case (0) {
             <h2>Which speciality?</h2>
-            <div class="seg" role="group" aria-label="Visit type" style="margin-bottom:14px">@for (m of ['In-person','Video consult']; track m) {<button [attr.aria-pressed]="mode()===m" (click)="mode.set(m)">{{ m==='In-person' ? '🏥' : '🎥' }} {{ m }}</button>}</div>
-            <div class="sg">@for (s of specs; track s.slug) {<button class="sc" [attr.aria-pressed]="spec()===s.slug" (click)="spec.set(s.slug); step.set(1)"><span aria-hidden="true">{{ s.icon }}</span>{{ s.name }}</button>}</div>
+            <div class="seg" role="group" aria-label="Visit type" style="margin-bottom:14px">@for (m of ['In-person','Video consult']; track m) {<button [attr.aria-pressed]="mode()===m" (click)="mode.set(m)"><x-ic [n]="m==='In-person' ? 'hospital' : 'video'"></x-ic> {{ m }}</button>}</div>
+            <div class="sg">@for (s of specs; track s.slug) {<button class="sc" [attr.aria-pressed]="spec()===s.slug" (click)="spec.set(s.slug); step.set(1)"><span aria-hidden="true"><x-ic [n]="s.icon"></x-ic></span>{{ s.name }}</button>}</div>
           }
           @case (1) {
             <h2>Choose a doctor</h2>
@@ -52,8 +53,8 @@ import { DOCTORS, Doctor, IMG, SPECIALITIES } from '../data';
       <aside class="card sum" reveal="100">
         <h2>Your appointment</h2>
         <dl><dt>Visit</dt><dd>{{ mode() }}</dd><dt>Speciality</dt><dd>{{ specName() || '—' }}</dd><dt>Doctor</dt><dd>{{ doc()?.name || '—' }}</dd><dt>When</dt><dd>{{ date() ? date() + ', ' + slot() : '—' }}</dd><dt>Fee</dt><dd>{{ doc() ? '₹' + doc()!.fee : '—' }}</dd></dl>
-        <div class="note">💡 Please arrive 15 minutes early with a photo ID and previous reports.</div>
-        <div class="help"><b>Prefer to call?</b><a href="tel:+910000000000">📞 Appointment desk</a></div>
+        <div class="note"><x-ic n="💡"></x-ic> Please arrive 15 minutes early with a photo ID and previous reports.</div>
+        <div class="help"><b>Prefer to call?</b><a href="tel:+910000000000"><x-ic n="📞"></x-ic> Appointment desk</a></div>
       </aside>
     </div>
   </section>

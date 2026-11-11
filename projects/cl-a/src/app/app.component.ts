@@ -4,16 +4,17 @@ import { FormsModule } from '@angular/forms';
 import { LockService, ThemeService, ToastService } from '@shared/core';
 import { LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, ThemePickerComponent, SearchOverlayComponent, ChatbotComponent, BotIntent } from '@shared/ui';
 import { BRAND, IMG, SEARCH_INDEX } from './data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
   selector: 'app-root', standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, FormsModule, LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, ThemePickerComponent, SearchOverlayComponent, ChatbotComponent],
+  imports: [IconComponent, RouterOutlet, RouterLink, RouterLinkActive, FormsModule, LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, ThemePickerComponent, SearchOverlayComponent, ChatbotComponent],
   template: `
   @if (bar()) {
   <div class="ann" role="region" aria-label="Announcement">
     <span class="ann-dot" aria-hidden="true"></span>
     <span><b>Rise Leadership Forum 2027</b> · Early-bird tickets are open. <a routerLink="/summit">Get tickets →</a></span>
-    <button (click)="bar.set(false)" aria-label="Dismiss announcement">✕</button>
+    <button (click)="bar.set(false)" aria-label="Dismiss announcement"><x-ic n="✕"></x-ic></button>
   </div>
   }
   <header class="hd" [class.solid]="solid()" [class.over]="overHero()">
@@ -69,7 +70,7 @@ import { BRAND, IMG, SEARCH_INDEX } from './data';
   @if (drawer()) {
   <div class="dr-ov" (click)="drawer.set(false)"></div>
   <nav class="drawer" aria-label="Mobile">
-    <button class="ic cl" (click)="drawer.set(false)" aria-label="Close menu">✕</button>
+    <button class="ic cl" (click)="drawer.set(false)" aria-label="Close menu"><x-ic n="✕"></x-ic></button>
     @for (l of mobile; track l[0]) { <a [routerLink]="l[1]" (click)="drawer.set(false)">{{ l[0] }}</a> }
     <div class="dr-b"><a class="btn btn-p" routerLink="/donate" (click)="drawer.set(false)">Donate</a><button class="btn btn-o" (click)="drawer.set(false); lock.gate('Members’ Lounge')">Member sign in</button></div>
   </nav>
@@ -100,7 +101,7 @@ import { BRAND, IMG, SEARCH_INDEX } from './data';
 
   <x-search [items]="index" [popular]="['Mentorship','Webinar','Toolkit','Hotels','Forum']" placeholder="Search events, courses, resources, jobs…" />
   <x-lock /><x-checkout /><x-cookies /><x-toasts /><x-theme />
-  <x-bot name="Rosie · CL-A assistant" avatar="✿" hint="Hi! Ask me anything ✿" greeting="Hi, I'm Rosie! I can help you find events, mentorship, courses or membership info." [starters]="['Upcoming events','Find a mentor','Membership prices','Post a job']" [intents]="intents" fallback="Good question! I'll pass that to our team, or you can try one of these:" />
+  <x-bot name="Rosie · CL-A assistant" avatar="✿" hint="Hi! Ask me anything" greeting="Hi, I'm Rosie! I can help you find events, mentorship, courses or membership info." [starters]="['Upcoming events','Find a mentor','Membership prices','Post a job']" [intents]="intents" fallback="Good question! I'll pass that to our team, or you can try one of these:" />
   `,
   styleUrl: './app.component.scss',
 })
@@ -125,5 +126,5 @@ export class AppComponent {
   }
   @HostListener('window:scroll') onScroll() { this.solid.set(window.scrollY > 40); }
   @HostListener('document:keydown.escape') esc() { this.mega.set(''); this.drawer.set(false); }
-  sub() { if (!/^\S+@\S+\.\S+$/.test(this.nl)) { this.toast.show('Please enter a valid email address', 'warn'); return; } this.toast.show('You’re subscribed. Welcome to the letter! ✿', 'ok'); this.nl = ''; }
+  sub() { if (!/^\S+@\S+\.\S+$/.test(this.nl)) { this.toast.show('Please enter a valid email address', 'warn'); return; } this.toast.show('You’re subscribed. Welcome to the letter.', 'ok'); this.nl = ''; }
 }

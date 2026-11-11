@@ -4,9 +4,10 @@ import { DatePipe } from '@angular/common';
 import { LockService, RevealDirective, TiltDirective, ToastService } from '@shared/core';
 import { CHAPTERS, EVENTS, EXPERIENCES, IMG } from '../data';
 import type { Journey, FrameScrubber } from '../three-journey';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, DatePipe, RevealDirective, TiltDirective],
+  standalone: true, imports: [IconComponent, RouterLink, DatePipe, RevealDirective, TiltDirective],
   template: `
   <!-- ===== 3D SCROLL JOURNEY ===== -->
   <section class="journey" #journey aria-label="Interactive 3D journey: mountains, lake, lodge and aurora">
@@ -31,23 +32,16 @@ import type { Journey, FrameScrubber } from '../three-journey';
           <h2>{{ c.t }}</h2>
           <p>{{ c.d }}</p>
           @if (i===2) { <button class="btn btn-p" (click)="lock.pay('Lakeside Timber Lodge · 1 night', 420, 'CAD', [['Cabin for two', 420], ['Taxes & fees', 0]])">Book the lodge</button> }
-          @if (i===3) { <button class="btn btn-p" (click)="lock.gate('Aurora alerts')">🔔 Get aurora alerts</button> }
+          @if (i===3) { <button class="btn btn-p" (click)="lock.gate('Aurora alerts')"><x-ic n="🔔"></x-ic> Get aurora alerts</button> }
           @if (i===4) { <a class="btn btn-p" routerLink="/events">Plan a group journey</a> }
         </article>
       }
 
-      <nav class="rail" aria-label="Journey chapters">
-        @for (c of chapters; track c.n; let i = $index) {
-          <button [class.on]="chap()===i" (click)="goChapter(i)" [attr.aria-label]="'Go to chapter ' + c.k"><span>{{ c.k }}</span><i></i></button>
-        }
-        <div class="bar" aria-hidden="true"><i [style.transform]="'scaleY(' + p() + ')'"></i></div>
-      </nav>
 
-      <div class="hud" aria-hidden="true"><span>{{ (p()*100).toFixed(0) }}%</span><span>{{ timeOfDay() }}</span></div>
+      <div class="hud" aria-hidden="true"><span>{{ chapters[chap()].k }}</span><span>{{ timeOfDay() }}</span></div>
       @if (hasVideo()) {
         <div class="mode glass" role="group" aria-label="Render mode"><button [attr.aria-pressed]="mode()==='3d'" (click)="mode.set('3d')">Real-time 3D</button><button [attr.aria-pressed]="mode()==='video'" (click)="mode.set('video')">Cinematic</button></div>
       }
-      <button class="pause glass" (click)="togglePause()" [attr.aria-pressed]="paused()" [attr.aria-label]="paused() ? 'Resume 3D animation' : 'Pause 3D animation'">{{ paused() ? '▶' : '❚❚' }}</button>
     </div>
   </section>
 
@@ -61,7 +55,7 @@ import type { Journey, FrameScrubber } from '../three-journey';
             <img [src]="e.img" alt="" loading="lazy">
             <div class="xin"><span class="tag">{{ e.cat }}</span><h3>{{ e.title }}</h3><p>{{ e.place }}</p>
               <div class="xf"><b>From {{ '$' + e.price }}</b><button class="btn btn-p" (click)="lock.pay(e.title, e.price, 'CAD', [[e.title, e.price]])">Book</button></div></div>
-            <button class="heart" (click)="lock.gate('Wishlist')" [attr.aria-label]="'Save ' + e.title">♡</button>
+            <button class="heart" (click)="lock.gate('Wishlist')" [attr.aria-label]="'Save ' + e.title"><x-ic n="♡"></x-ic></button>
           </article>
         }
       </div>
@@ -69,7 +63,7 @@ import type { Journey, FrameScrubber } from '../three-journey';
     </div>
   </section>
 
-  <section class="marq" aria-hidden="true"><div class="mt">@for (w of words; track $index) {<span>{{ w }}</span><i>✦</i>}</div></section>
+  <section class="marq" aria-hidden="true"><div class="mt">@for (w of words; track $index) {<span>{{ w }}</span><i><x-ic n="✦"></x-ic></i>}</div></section>
 
   <section class="sec" aria-labelledby="h-a">
     <div class="wrap split">
@@ -77,7 +71,7 @@ import type { Journey, FrameScrubber } from '../three-journey';
         <span class="kick">For hosts &amp; partners</span>
         <h2 id="h-a" class="big-h">A platform built for <span class="serif grad-text">hospitality</span></h2>
         <ul class="feat">
-          @for (f of feats; track f[1]) {<li><span aria-hidden="true">{{ f[0] }}</span><div><b>{{ f[1] }}</b><p>{{ f[2] }}</p></div></li>}
+          @for (f of feats; track f[1]) {<li><span aria-hidden="true"><x-ic [n]="f[0]" s="22"></x-ic></span><div><b>{{ f[1] }}</b><p>{{ f[2] }}</p></div></li>}
         </ul>
         <button class="btn btn-p" (click)="lock.gate('Partner portal')">Open the partner portal</button>
       </div>
@@ -88,7 +82,7 @@ import type { Journey, FrameScrubber } from '../three-journey';
           <svg viewBox="0 0 400 140" class="chart" aria-hidden="true"><path d="M0 120 C60 100 80 60 140 70 S240 20 300 40 380 10 400 15" fill="none" stroke="var(--primary)" stroke-width="3"/><path d="M0 130 C70 120 100 95 160 100 S260 70 320 80 380 60 400 62" fill="none" stroke="var(--accent)" stroke-width="3" opacity=".7"/></svg>
           <div class="rows">@for (r of [1,2,3]; track r) {<div></div>}</div>
         </div>
-        <div class="gate"><span class="lk" aria-hidden="true">🔒</span><b>Partner access only</b><button class="btn btn-p" (click)="lock.gate('Partner dashboard')">Sign in</button></div>
+        <div class="gate"><span class="lk" aria-hidden="true"><x-ic n="🔒"></x-ic></span><b>Partner access only</b><button class="btn btn-p" (click)="lock.gate('Partner dashboard')">Sign in</button></div>
       </div>
     </div>
   </section>

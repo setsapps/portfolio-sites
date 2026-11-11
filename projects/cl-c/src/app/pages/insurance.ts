@@ -3,9 +3,10 @@ import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LockService, RevealDirective } from '@shared/core';
 import { IMG, INSURERS } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, FormsModule, RevealDirective],
+  standalone: true, imports: [IconComponent, RouterLink, FormsModule, RevealDirective],
   template: `
   <section class="page-hero"><img [src]="img.hero2" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Insurance &amp; TPA</span></nav>
@@ -17,7 +18,7 @@ import { IMG, INSURERS } from '../data';
       <div class="ck card" reveal>
         <h2>Is my insurer accepted?</h2>
         <label for="iq" class="sr-only">Search insurer</label><input id="iq" [ngModel]="q()" (ngModelChange)="q.set($event)" placeholder="Type your insurer, TPA or scheme…">
-        <div class="ig">@for (i of list(); track i) {<span>✓ {{ i }}</span>} @empty {<p>Not listed? Call the insurance desk and we'll check for you.</p>}</div>
+        <div class="ig">@for (i of list(); track i) {<span><x-ic n="✓"></x-ic> {{ i }}</span>} @empty {<p>Not listed? Call the insurance desk and we'll check for you.</p>}</div>
         <button class="btn btn-p" (click)="lock.gate('Pre-authorisation request')">Start pre-authorisation</button>
       </div>
     </div>

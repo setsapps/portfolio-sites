@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { LockService, ToastService } from '@shared/core';
 import { LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, ThemePickerComponent, SearchOverlayComponent, ChatbotComponent, BotIntent } from '@shared/ui';
 import { SEARCH_INDEX } from './data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
   selector: 'app-root', standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, FormsModule, LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, ThemePickerComponent, SearchOverlayComponent, ChatbotComponent],
+  imports: [IconComponent, RouterOutlet, RouterLink, RouterLinkActive, FormsModule, LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, ThemePickerComponent, SearchOverlayComponent, ChatbotComponent],
   template: `
   <header class="hd" [class.hide]="hide()">
     <div class="pill glass">
@@ -20,17 +21,17 @@ import { SEARCH_INDEX } from './data';
       </ul></nav>
       <div class="act">
         <button class="ic" (click)="lock.searchOpen.set(true)" aria-label="Search (Ctrl+K)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
-        <button class="ic" (click)="lock.gate('Wishlist')" aria-label="Wishlist">♡</button>
+        <button class="ic" (click)="lock.gate('Wishlist')" aria-label="Wishlist"><x-ic n="♡"></x-ic></button>
         <button class="ic hide-sm" (click)="lock.gate('Account')" aria-label="Sign in"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></button>
         <a class="btn btn-p cta" routerLink="/experiences">Book</a>
-        <button class="ic menu" (click)="menu.set(true)" aria-label="Open menu" [attr.aria-expanded]="menu()">☰</button>
+        <button class="ic menu" (click)="menu.set(true)" aria-label="Open menu" [attr.aria-expanded]="menu()"><x-ic n="☰"></x-ic></button>
       </div>
     </div>
   </header>
 
   @if (menu()) {
     <div class="mo" role="dialog" aria-modal="true" aria-label="Menu">
-      <button class="ic x" (click)="menu.set(false)" aria-label="Close menu">✕</button>
+      <button class="ic x" (click)="menu.set(false)" aria-label="Close menu"><x-ic n="✕"></x-ic></button>
       <nav aria-label="Full menu">@for (l of links; track l[1]; let i = $index) {<a [routerLink]="l[1]" (click)="menu.set(false)" [style.animation-delay.ms]="i*60"><small>0{{ i+1 }}</small>{{ l[0] }}</a>}</nav>
       <div class="mo-f"><button class="btn btn-p" (click)="menu.set(false); lock.gate('Account')">Sign in</button><button class="btn btn-o" (click)="menu.set(false); lock.cookiePrefsOpen.set(true)">Cookie settings</button></div>
     </div>
@@ -53,7 +54,7 @@ import { SEARCH_INDEX } from './data';
 
   <x-search [items]="index" [popular]="['Lodge','Aurora','Kayak','Culinary','Summit']" placeholder="Search experiences, stays, events…" />
   <x-lock /><x-checkout /><x-cookies /><x-toasts /><x-theme />
-  <x-bot name="Nova · journey concierge" avatar="✦" hint="Plan a trip with me ✦" greeting="Hi, I'm Nova, your journey concierge. Where should we take you?" [starters]="['Aurora nights','Lakeside lodge','Plan my trip','Group events']" [intents]="intents" fallback="Lovely idea. I can pass that to our concierge team, or try:" />
+  <x-bot name="Nova · journey concierge" avatar="✦" hint="Plan a trip with me" greeting="Hi, I'm Nova, your journey concierge. Where should we take you?" [starters]="['Aurora nights','Lakeside lodge','Plan my trip','Group events']" [intents]="intents" fallback="Lovely idea. I can pass that to our concierge team, or try:" />
   `,
   styleUrl: './app.component.scss',
 })
@@ -71,5 +72,5 @@ export class AppComponent {
   constructor() { this.router.events.subscribe(e => { if (e instanceof NavigationEnd) this.menu.set(false); }); }
   @HostListener('window:scroll') onScroll() { const y = scrollY; this.hide.set(y > this.lastY && y > 300); this.lastY = y; }
   @HostListener('document:keydown.escape') esc() { this.menu.set(false); }
-  sub() { if (!/^\S+@\S+\.\S+$/.test(this.nl)) { this.toast.show('Please enter a valid email', 'warn'); return; } this.toast.show('Welcome aboard ✦ Journey notes are on their way.', 'ok'); this.nl = ''; }
+  sub() { if (!/^\S+@\S+\.\S+$/.test(this.nl)) { this.toast.show('Please enter a valid email', 'warn'); return; } this.toast.show('Welcome aboard. Journey notes are on their way.', 'ok'); this.nl = ''; }
 }

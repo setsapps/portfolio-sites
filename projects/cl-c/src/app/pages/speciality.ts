@@ -3,22 +3,23 @@ import { RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { LockService, RevealDirective } from '@shared/core';
 import { DOCTORS, FAQS, IMG, SPECIALITIES } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, RevealDirective],
+  standalone: true, imports: [IconComponent, RouterLink, RevealDirective],
   template: `
   @if (s(); as s) {
   <section class="page-hero"><img [src]="hero()" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <a routerLink="/specialities">Specialities</a> / <span>{{ s.name }}</span></nav>
-      <span class="big" aria-hidden="true">{{ s.icon }}</span><h1>{{ s.name }}</h1><p>{{ s.blurb }}</p>
+      <span class="big" aria-hidden="true"><x-ic [n]="s.icon" s="56" w="1.4"></x-ic></span><h1>{{ s.name }}</h1><p>{{ s.blurb }}</p>
       <div class="hb"><a class="btn btn-a" routerLink="/book">Book a consultation</a><button class="btn btn-o" style="color:#fff" (click)="lock.gate('Second opinion')">Get a second opinion</button></div></div>
   </section>
   <nav class="sub" aria-label="On this page"><div class="wrap">@for (t of tabs; track t[0]) {<a [href]="'#' + t[0]">{{ t[1] }}</a>}</div></nav>
   <section class="sec" id="treat"><div class="wrap two">
     <div reveal><div class="eyebrow">Treatments &amp; procedures</div><h2 class="h">What we treat</h2>
-      <div class="tl">@for (t of s.treatments; track t) {<div class="tr card"><span aria-hidden="true">✓</span>{{ t }}</div>}</div></div>
+      <div class="tl">@for (t of s.treatments; track t) {<div class="tr card"><span aria-hidden="true"><x-ic n="✓"></x-ic></span>{{ t }}</div>}</div></div>
     <aside class="cta card" reveal="100"><h3>Talk to a care coordinator</h3><p>Not sure which treatment is right? Share your reports and we'll guide you to the right specialist.</p>
-      <a class="btn btn-p" href="tel:+910000000000">📞 Call the desk</a><button class="btn btn-l" (click)="lock.gate('Upload reports')">⬆ Upload reports</button>
+      <a class="btn btn-p" href="tel:+910000000000"><x-ic n="📞"></x-ic> Call the desk</a><button class="btn btn-l" (click)="lock.gate('Upload reports')"><x-ic n="⬆"></x-ic> Upload reports</button>
       <div class="est"><b>Treatment cost estimate</b><small>Get a personalised estimate for your procedure and insurance.</small><button class="btn btn-l" (click)="lock.gate('Cost estimate')">Request estimate</button></div></aside>
   </div></section>
   <section class="sec bg" id="docs"><div class="wrap">

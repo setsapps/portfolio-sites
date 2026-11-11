@@ -3,9 +3,10 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { LockService, RevealDirective, TiltDirective, ToastService } from '@shared/core';
 import { IMG, PACKAGES, Pkg } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, DecimalPipe, RevealDirective, TiltDirective],
+  standalone: true, imports: [IconComponent, RouterLink, DecimalPipe, RevealDirective, TiltDirective],
   template: `
   <section class="page-hero"><img [src]="img.lab" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Health Checks</span></nav>
@@ -15,7 +16,7 @@ import { IMG, PACKAGES, Pkg } from '../data';
     <div class="wrap">
       <div class="top" reveal>
         <div class="seg" role="group" aria-label="Category">@for (c of cats; track c) {<button [attr.aria-pressed]="cat()===c" (click)="cat.set(c)">{{ c }}</button>}</div>
-        <button class="btn btn-l cartb" (click)="showCart.set(!showCart())" [attr.aria-expanded]="showCart()">🛒 Cart ({{ cart().length }})</button>
+        <button class="btn btn-l cartb" (click)="showCart.set(!showCart())" [attr.aria-expanded]="showCart()"><x-ic n="🛒"></x-ic> Cart ({{ cart().length }})</button>
       </div>
       <div class="pg">
         @for (p of list(); track p.id; let i = $index) {
@@ -23,10 +24,10 @@ import { IMG, PACKAGES, Pkg } from '../data';
             @if (p.hot) {<span class="rib">Best seller</span>}
             <span class="cat">{{ p.cat }}</span><h2>{{ p.name }}</h2>
             <div class="pr"><b>₹{{ p.price | number }}</b><s>₹{{ p.mrp | number }}</s><em>{{ off(p) }}% off</em></div>
-            <p class="tc">🧪 {{ p.tests }} tests · 🏠 Home collection · 📱 Digital report</p>
+            <p class="tc"><x-ic n="🧪"></x-ic> {{ p.tests }} tests · <x-ic n="🏠"></x-ic> Home collection · <x-ic n="📱"></x-ic> Digital report</p>
             <details><summary>What's included</summary><ul>@for (x of p.incl; track x) {<li>{{ x }}</li>}</ul></details>
             <div class="pa">
-              <button class="btn" [class.btn-p]="!inCart(p)" [class.btn-l]="inCart(p)" (click)="toggle(p)">{{ inCart(p) ? '✓ In cart' : 'Add to cart' }}</button>
+              <button class="btn" [class.btn-p]="!inCart(p)" [class.btn-l]="inCart(p)" (click)="toggle(p)">@if (inCart(p)) {<x-ic n="check"></x-ic> In cart} @else {Add to cart}</button>
               <label class="cmp"><input type="checkbox" [checked]="cmp().has(p.id)" (change)="tc(p)" [disabled]="!cmp().has(p.id) && cmp().size>=3"> Compare</label>
             </div>
           </article>
@@ -40,7 +41,7 @@ import { IMG, PACKAGES, Pkg } from '../data';
             <tbody>
               <tr><th scope="row">Price</th>@for (p of cmpList(); track p.id) {<td>₹{{ p.price | number }}</td>}</tr>
               <tr><th scope="row">Tests</th>@for (p of cmpList(); track p.id) {<td>{{ p.tests }}</td>}</tr>
-              @for (f of allIncl(); track f) {<tr><th scope="row">{{ f }}</th>@for (p of cmpList(); track p.id) {<td>{{ p.incl.includes(f) ? '✓' : '—' }}</td>}</tr>}
+              @for (f of allIncl(); track f) {<tr><th scope="row">{{ f }}</th>@for (p of cmpList(); track p.id) {<td>@if (p.incl.includes(f)) {<x-ic n="check" style="color:var(--ok)"></x-ic><span class="sr-only">Included</span>} @else {—}</td>}</tr>}
             </tbody></table></div>
         </div>
       }
@@ -48,8 +49,8 @@ import { IMG, PACKAGES, Pkg } from '../data';
   </section>
   @if (showCart()) {
     <aside class="cart card" aria-label="Cart">
-      <div class="ch"><b>Your cart</b><button (click)="showCart.set(false)" aria-label="Close cart">✕</button></div>
-      @for (p of cart(); track p.id) {<div class="ci"><span>{{ p.name }}</span><b>₹{{ p.price | number }}</b><button (click)="toggle(p)" [attr.aria-label]="'Remove ' + p.name">✕</button></div>} @empty {<p class="muted">Your cart is empty.</p>}
+      <div class="ch"><b>Your cart</b><button (click)="showCart.set(false)" aria-label="Close cart"><x-ic n="✕"></x-ic></button></div>
+      @for (p of cart(); track p.id) {<div class="ci"><span>{{ p.name }}</span><b>₹{{ p.price | number }}</b><button (click)="toggle(p)" [attr.aria-label]="'Remove ' + p.name"><x-ic n="✕"></x-ic></button></div>} @empty {<p class="muted">Your cart is empty.</p>}
       @if (cart().length) {<div class="ctot"><span>Total</span><b>₹{{ total() | number }}</b></div><button class="btn btn-a" (click)="checkout()">Checkout</button>}
     </aside>
   }

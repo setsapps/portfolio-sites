@@ -4,9 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LockService, RevealDirective, ToastService } from '@shared/core';
 import { EVENTS, EventItem, IMG } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [DatePipe, FormsModule, RouterLink, RevealDirective],
+  standalone: true, imports: [IconComponent, DatePipe, FormsModule, RouterLink, RevealDirective],
   template: `
   <section class="page-hero"><img [src]="img.network" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Events</span></nav>
@@ -21,8 +22,8 @@ import { EVENTS, EventItem, IMG } from '../data';
           @for (t of types; track t) { <button [attr.aria-pressed]="type()===t" (click)="type.set(t)">{{ t }}</button> }
         </div>
         <div class="pill-tabs view" role="group" aria-label="View">
-          <button [attr.aria-pressed]="view()==='grid'" (click)="view.set('grid')">▦ Grid</button>
-          <button [attr.aria-pressed]="view()==='cal'" (click)="view.set('cal')">▤ Calendar</button>
+          <button [attr.aria-pressed]="view()==='grid'" (click)="view.set('grid')"><x-ic n="▦"></x-ic> Grid</button>
+          <button [attr.aria-pressed]="view()==='cal'" (click)="view.set('cal')"><x-ic n="▤"></x-ic> Calendar</button>
         </div>
       </div>
       <p class="count" role="status" aria-live="polite">{{ list().length }} event{{ list().length===1?'':'s' }}</p>
@@ -60,12 +61,12 @@ import { EVENTS, EventItem, IMG } from '../data';
   @if (open(); as e) {
     <div class="ov" (click)="open.set(null)"></div>
     <aside class="drawer" role="dialog" aria-modal="true" [attr.aria-label]="e.title">
-      <button class="x" (click)="open.set(null)" aria-label="Close">✕</button>
+      <button class="x" (click)="open.set(null)" aria-label="Close"><x-ic n="✕"></x-ic></button>
       <div class="dimg"><img [src]="e.img" alt=""></div>
       <div class="dbody">
         <span class="chip">{{ e.type }}</span>
         <h2 class="display">{{ e.title }}</h2>
-        <ul class="meta"><li>📅 {{ e.date | date:'EEEE, MMMM d, y' }}</li><li>🕒 {{ e.time }}</li><li>📍 {{ e.place }}</li><li>🎟 {{ e.seats }}</li></ul>
+        <ul class="meta"><li><x-ic n="📅"></x-ic> {{ e.date | date:'EEEE, MMMM d, y' }}</li><li><x-ic n="🕒"></x-ic> {{ e.time }}</li><li><x-ic n="📍"></x-ic> {{ e.place }}</li><li><x-ic n="🎟"></x-ic> {{ e.seats }}</li></ul>
         <p>{{ e.desc }}</p>
         <h3>Tickets</h3>
         <div class="tix" role="radiogroup" aria-label="Ticket type">

@@ -1,9 +1,10 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { LockService, RevealDirective } from '@shared/core';
 import { EXPERIENCES } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RevealDirective],
+  standalone: true, imports: [IconComponent, RevealDirective],
   template: `
   <section class="page-top"><div class="wrap"><span class="kick">AI trip planner</span><h1>Design your <span class="serif grad-text">journey</span></h1><p>Pick a mood, length and pace. We'll draft a day-by-day itinerary you can tweak, save and book.</p></div></section>
   <section class="wrap pl">
@@ -11,7 +12,7 @@ import { EXPERIENCES } from '../data';
       <fieldset><legend>Mood</legend><div class="seg">@for (m of moods; track m) {<button [attr.aria-pressed]="mood()===m" (click)="mood.set(m)">{{ m }}</button>}</div></fieldset>
       <fieldset><legend>Length: {{ days() }} days</legend><input type="range" min="2" max="7" [value]="days()" (input)="days.set(+$any($event.target).value)" aria-label="Trip length in days"></fieldset>
       <fieldset><legend>Pace</legend><div class="seg">@for (p of paces; track p) {<button [attr.aria-pressed]="pace()===p" (click)="pace.set(p)">{{ p }}</button>}</div></fieldset>
-      <button class="btn btn-p" (click)="gen()">✦ Generate itinerary</button>
+      <button class="btn btn-p" (click)="gen()"><x-ic n="✦"></x-ic> Generate itinerary</button>
     </div>
     <div class="out" aria-live="polite">
       @if (busy()) { <div class="glass ld"><span></span>Drafting your {{ days() }}-day {{ mood().toLowerCase() }} journey…</div> }

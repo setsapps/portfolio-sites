@@ -2,29 +2,30 @@ import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LockService, RevealDirective } from '@shared/core';
 import { IMG } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, RevealDirective],
+  standalone: true, imports: [IconComponent, RouterLink, RevealDirective],
   template: `
   <section class="page-hero"><img [src]="img.lab" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Patient Portal</span></nav>
       <h1>Your health records, <em>secure</em></h1><p>Lab reports, prescriptions, discharge summaries, bills and upcoming visits in one place. Sign in with your mobile OTP and doctor referral number.</p>
-      <button class="btn btn-a" style="margin-top:22px" (click)="lock.gate('Patient portal')">🔐 Sign in with mobile OTP</button></div>
+      <button class="btn btn-a" style="margin-top:22px" (click)="lock.gate('Patient portal')"><x-ic n="🔐"></x-ic> Sign in with mobile OTP</button></div>
   </section>
   <section class="sec">
     <div class="wrap blur-lock" reveal>
       <div class="inner pt card">
         <div class="ph"><div class="av"></div><div><b>Patient name</b><small>UHID LH-000000 · Blood group O+</small></div></div>
-        <div class="tiles">@for (t of tiles; track t[0]) {<div class="t"><span>{{ t[1] }}</span><b>{{ t[0] }}</b></div>}</div>
+        <div class="tiles">@for (t of tiles; track t[0]) {<div class="t"><span><x-ic [n]="t[1]" s="26"></x-ic></span><b>{{ t[0] }}</b></div>}</div>
         <div class="cols">
-          <div class="pane"><b>Recent reports</b>@for (r of ['Complete Blood Count','Lipid Profile','HbA1c','Chest X-ray']; track r) {<div class="rw"><span>{{ r }}</span><em>Ready</em><i>⬇</i></div>}</div>
+          <div class="pane"><b>Recent reports</b>@for (r of ['Complete Blood Count','Lipid Profile','HbA1c','Chest X-ray']; track r) {<div class="rw"><span>{{ r }}</span><em>Ready</em><i><x-ic n="⬇"></x-ic></i></div>}</div>
           <div class="pane"><b>Vitals trend</b><svg viewBox="0 0 300 120" class="ch" aria-hidden="true"><polyline fill="none" stroke="var(--primary)" stroke-width="3" points="0,90 50,80 100,85 150,60 200,55 250,40 300,45"/><polyline fill="none" stroke="var(--accent)" stroke-width="3" points="0,60 50,62 100,58 150,64 200,59 250,61 300,57"/></svg></div>
         </div>
       </div>
-      <div class="gate"><div class="lk" aria-hidden="true">🔒</div><h2>Protected health information</h2><p>Verify your mobile number with OTP, then enter the referral number from your doctor.</p><button class="btn btn-p" (click)="lock.gate('Patient portal')">Verify &amp; continue</button></div>
+      <div class="gate"><div class="lk" aria-hidden="true"><x-ic n="🔒"></x-ic></div><h2>Protected health information</h2><p>Verify your mobile number with OTP, then enter the referral number from your doctor.</p><button class="btn btn-p" (click)="lock.gate('Patient portal')">Verify &amp; continue</button></div>
     </div>
     <div class="wrap fs">
-      @for (f of feats; track f[1]; let i = $index) {<div class="f card" [reveal]="i*60"><span aria-hidden="true">{{ f[0] }}</span><h3>{{ f[1] }}</h3><p>{{ f[2] }}</p><button class="lnk" (click)="lock.gate(f[1])">Open →</button></div>}
+      @for (f of feats; track f[1]; let i = $index) {<div class="f card" [reveal]="i*60"><span aria-hidden="true"><x-ic [n]="f[0]" s="28"></x-ic></span><h3>{{ f[1] }}</h3><p>{{ f[2] }}</p><button class="lnk" (click)="lock.gate(f[1])">Open →</button></div>}
     </div>
   </section>`,
   styles: [`

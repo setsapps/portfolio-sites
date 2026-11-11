@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { LockService, RevealDirective } from '@shared/core';
 import { IMG } from '../data';
+import { IconComponent } from '@shared/icons';
 
 interface Svc { t: string; em: string; d: string; img: string; feats: [string, string, string][]; cta: string; steps?: string[]; }
 const SV: Record<string, Svc> = {
@@ -19,7 +20,7 @@ const SV: Record<string, Svc> = {
 };
 
 @Component({
-  standalone: true, imports: [RouterLink, RevealDirective],
+  standalone: true, imports: [IconComponent, RouterLink, RevealDirective],
   template: `
   @if (s(); as s) {
   <section class="page-hero"><img [src]="s.img" alt="" fetchpriority="high">
@@ -28,7 +29,7 @@ const SV: Record<string, Svc> = {
       <button class="btn btn-a" style="margin-top:22px" (click)="lock.gate(s.t + ' ' + s.em)">{{ s.cta }}</button></div>
   </section>
   <section class="sec"><div class="wrap">
-    <div class="g">@for (f of s.feats; track f[1]; let i = $index) {<div class="f card" [reveal]="i*60"><span aria-hidden="true">{{ f[0] }}</span><h2>{{ f[1] }}</h2><p>{{ f[2] }}</p></div>}</div>
+    <div class="g">@for (f of s.feats; track f[1]; let i = $index) {<div class="f card" [reveal]="i*60"><span aria-hidden="true"><x-ic [n]="f[0]" s="30"></x-ic></span><h2>{{ f[1] }}</h2><p>{{ f[2] }}</p></div>}</div>
     @if (s.steps) {<ol class="st" reveal>@for (x of s.steps; track x; let i = $index) {<li><span>{{ i+1 }}</span>{{ x }}</li>}</ol>}
   </div></section>
   } @else {

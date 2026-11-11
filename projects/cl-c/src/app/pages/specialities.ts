@@ -3,9 +3,10 @@ import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { RevealDirective, TiltDirective } from '@shared/core';
 import { IMG, SPECIALITIES } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, FormsModule, RevealDirective, TiltDirective],
+  standalone: true, imports: [IconComponent, RouterLink, FormsModule, RevealDirective, TiltDirective],
   template: `
   <section class="page-hero"><img [src]="img.surgery" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Specialities</span></nav>
@@ -16,7 +17,7 @@ import { IMG, SPECIALITIES } from '../data';
     <div class="wrap g">
       @for (s of list(); track s.slug; let i = $index) {
         <a class="sc card" [routerLink]="['/specialities', s.slug]" tilt [reveal]="(i%4)*50">
-          <span class="ic" aria-hidden="true">{{ s.icon }}</span>
+          <span class="ic" aria-hidden="true"><x-ic [n]="s.icon" s="28"></x-ic></span>
           @if (s.coe) {<span class="coe">Centre of excellence</span>}
           <h2>{{ s.name }}</h2><p>{{ s.blurb }}</p>
           <span class="go">View treatments →</span>

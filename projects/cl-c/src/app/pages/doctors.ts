@@ -3,9 +3,10 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LockService, RevealDirective, ToastService } from '@shared/core';
 import { DOCTORS, Doctor, IMG, SPECIALITIES } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, FormsModule, RevealDirective],
+  standalone: true, imports: [IconComponent, RouterLink, FormsModule, RevealDirective],
   template: `
   <section class="page-hero"><img [src]="img.hero3" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Find a Doctor</span></nav>
@@ -29,8 +30,8 @@ import { DOCTORS, Doctor, IMG, SPECIALITIES } from '../data';
             <img [src]="d.img" alt="" loading="lazy">
             <div class="db">
               <h2>{{ d.name }}</h2><p class="sp">{{ d.spec }}</p><p class="deg">{{ d.deg }}</p>
-              <ul class="m"><li>🎓 {{ d.exp }}+ years</li><li>🗣 {{ d.langs.join(', ') }}</li><li>📅 {{ d.days.join(' · ') }}</li><li>₹{{ d.fee }} consultation</li></ul>
-              <div class="act"><button class="btn btn-p" (click)="open.set(d)">Book slot</button>@if (d.video) {<button class="btn btn-l" (click)="lock.gate('Video consultation')">🎥 Video</button>}<button class="btn btn-l" (click)="profile.set(d)">Profile</button></div>
+              <ul class="m"><li><x-ic n="🎓"></x-ic> {{ d.exp }}+ years</li><li><x-ic n="🗣"></x-ic> {{ d.langs.join(', ') }}</li><li><x-ic n="📅"></x-ic> {{ d.days.join(' · ') }}</li><li>₹{{ d.fee }} consultation</li></ul>
+              <div class="act"><button class="btn btn-p" (click)="open.set(d)">Book slot</button>@if (d.video) {<button class="btn btn-l" (click)="lock.gate('Video consultation')"><x-ic n="🎥"></x-ic> Video</button>}<button class="btn btn-l" (click)="profile.set(d)">Profile</button></div>
             </div>
           </article>
         } @empty { <p class="card" style="padding:30px;grid-column:1/-1;text-align:center">No doctors match. Try clearing a filter.</p> }
@@ -41,7 +42,7 @@ import { DOCTORS, Doctor, IMG, SPECIALITIES } from '../data';
   @if (open(); as d) {
     <div class="ov" (click)="open.set(null)"></div>
     <div class="sl" role="dialog" aria-modal="true" [attr.aria-label]="'Book with ' + d.name">
-      <button class="x" (click)="open.set(null)" aria-label="Close">✕</button>
+      <button class="x" (click)="open.set(null)" aria-label="Close"><x-ic n="✕"></x-ic></button>
       <div class="sh"><img [src]="d.img" alt=""><div><h2>{{ d.name }}</h2><p>{{ d.spec }}</p></div></div>
       <h3>Choose a date</h3>
       <div class="dates" role="radiogroup" aria-label="Date">@for (x of next7(d); track x.k) {<button role="radio" [attr.aria-checked]="date()===x.k" [disabled]="!x.ok" (click)="date.set(x.k)"><small>{{ x.w }}</small><b>{{ x.d }}</b><small>{{ x.m }}</small></button>}</div>
@@ -56,7 +57,7 @@ import { DOCTORS, Doctor, IMG, SPECIALITIES } from '../data';
   @if (profile(); as d) {
     <div class="ov" (click)="profile.set(null)"></div>
     <div class="sl" role="dialog" aria-modal="true" [attr.aria-label]="d.name + ' profile'">
-      <button class="x" (click)="profile.set(null)" aria-label="Close">✕</button>
+      <button class="x" (click)="profile.set(null)" aria-label="Close"><x-ic n="✕"></x-ic></button>
       <div class="sh"><img [src]="d.img" alt=""><div><h2>{{ d.name }}</h2><p>{{ d.spec }}</p></div></div>
       <p><b>Qualifications:</b> {{ d.deg }}</p><p><b>Experience:</b> {{ d.exp }}+ years</p><p><b>Languages:</b> {{ d.langs.join(', ') }}</p><p><b>OPD days:</b> {{ d.days.join(', ') }}</p>
       <p class="muted">Sample profile. The live site shows the doctor's biography, areas of interest, publications and patient feedback.</p>

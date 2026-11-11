@@ -4,9 +4,10 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LockService, RevealDirective, TiltDirective, ToastService } from '@shared/core';
 import { BLOGS, DOCTORS, FAQS, H, IMG, INSURERS, NEWS, PACKAGES, SPECIALITIES, TESTIMONIALS } from '../data';
+import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [RouterLink, DatePipe, DecimalPipe, FormsModule, RevealDirective, TiltDirective],
+  standalone: true, imports: [IconComponent, RouterLink, DatePipe, DecimalPipe, FormsModule, RevealDirective, TiltDirective],
   template: `
   <!-- HERO -->
   <section class="hero" aria-labelledby="h1">
@@ -17,7 +18,7 @@ import { BLOGS, DOCTORS, FAQS, H, IMG, INSURERS, NEWS, PACKAGES, SPECIALITIES, T
         <span class="badge"><i aria-hidden="true"></i> OPD open today · 9 am – 5 pm</span>
         <h1 id="h1">World-class care, <em>close to home</em> in Ludhiana.</h1>
         <p>Multi-speciality hospital with 24×7 emergency, experienced specialists and a team that treats every patient like family.</p>
-        <div class="hc"><a class="btn btn-a" routerLink="/book">📅 Book Appointment</a><a class="btn btn-o" routerLink="/health-checks">Book Health Check</a></div>
+        <div class="hc"><a class="btn btn-a" routerLink="/book"><x-ic n="📅"></x-ic> Book Appointment</a><a class="btn btn-o" routerLink="/health-checks">Book Health Check</a></div>
       </div>
       <form class="finder" (ngSubmit)="find()" role="search" aria-label="Find care">
         <div class="ft-tabs" role="tablist" aria-label="Search for">
@@ -41,8 +42,8 @@ import { BLOGS, DOCTORS, FAQS, H, IMG, INSURERS, NEWS, PACKAGES, SPECIALITIES, T
   <!-- QUICK ACTIONS -->
   <section class="wrap qa" aria-label="Quick actions">
     @for (q of quick; track q[0]; let i = $index) {
-      @if (q[3]) { <button class="qc card" (click)="lock.gate(q[0])" [reveal]="i*40"><span class="qi" aria-hidden="true">{{ q[1] }}</span><b>{{ q[0] }}</b><small>{{ q[2] }}</small></button> }
-      @else { <a class="qc card" [routerLink]="q[4]" [reveal]="i*40"><span class="qi" aria-hidden="true">{{ q[1] }}</span><b>{{ q[0] }}</b><small>{{ q[2] }}</small></a> }
+      @if (q[3]) { <button class="qc card" (click)="lock.gate(q[0])" [reveal]="i*40"><span class="qi" aria-hidden="true"><x-ic [n]="q[1]" s="26"></x-ic></span><b>{{ q[0] }}</b><small>{{ q[2] }}</small></button> }
+      @else { <a class="qc card" [routerLink]="q[4]" [reveal]="i*40"><span class="qi" aria-hidden="true"><x-ic [n]="q[1]" s="26"></x-ic></span><b>{{ q[0] }}</b><small>{{ q[2] }}</small></a> }
     }
   </section>
 
@@ -52,7 +53,7 @@ import { BLOGS, DOCTORS, FAQS, H, IMG, INSURERS, NEWS, PACKAGES, SPECIALITIES, T
       <div class="sec-h" reveal><div><div class="eyebrow">Centres of excellence</div><h2 id="h-coe">Specialised care, <em>one roof</em></h2></div><a class="btn btn-l" routerLink="/specialities">All specialities →</a></div>
       <div class="coe" reveal>
         <div class="coe-tabs" role="tablist" aria-label="Centres of excellence">
-          @for (c of coe; track c.slug; let i = $index) {<button role="tab" [attr.aria-selected]="ci()===i" (click)="ci.set(i)"><span aria-hidden="true">{{ c.icon }}</span>{{ c.name }}</button>}
+          @for (c of coe; track c.slug; let i = $index) {<button role="tab" [attr.aria-selected]="ci()===i" (click)="ci.set(i)"><span aria-hidden="true"><x-ic [n]="c.icon"></x-ic></span>{{ c.name }}</button>}
         </div>
         <div class="coe-p" role="tabpanel">
           <img [src]="coeImg[ci() % coeImg.length]" alt="" loading="lazy">
@@ -60,7 +61,7 @@ import { BLOGS, DOCTORS, FAQS, H, IMG, INSURERS, NEWS, PACKAGES, SPECIALITIES, T
             <span class="chip">Centre of excellence</span>
             <h3>{{ coe[ci()].name }}</h3>
             <p>{{ coe[ci()].blurb }}</p>
-            <ul>@for (t of coe[ci()].treatments; track t) {<li>✓ {{ t }}</li>}</ul>
+            <ul>@for (t of coe[ci()].treatments; track t) {<li><x-ic n="✓"></x-ic> {{ t }}</li>}</ul>
             <div class="cb"><a class="btn btn-p" [routerLink]="['/specialities', coe[ci()].slug]">Explore centre</a><a class="btn btn-l" routerLink="/doctors" [queryParams]="{ s: coe[ci()].slug }">Meet the doctors</a></div>
           </div>
         </div>
@@ -108,7 +109,7 @@ import { BLOGS, DOCTORS, FAQS, H, IMG, INSURERS, NEWS, PACKAGES, SPECIALITIES, T
   <!-- EMERGENCY BAND -->
   <section class="emg" aria-labelledby="h-em">
     <div class="wrap eg">
-      <div><span class="sir" aria-hidden="true">🚑</span><div><h2 id="h-em">Medical emergency?</h2><p>24×7 emergency &amp; trauma with ambulance service across Ludhiana.</p></div></div>
+      <div><span class="sir" aria-hidden="true"><x-ic n="🚑"></x-ic></span><div><h2 id="h-em">Medical emergency?</h2><p>24×7 emergency &amp; trauma with ambulance service across Ludhiana.</p></div></div>
       <div class="eb"><a class="btn big" [href]="'tel:' + h.emergency">Call {{ h.emergency }}</a><a class="btn btn-o" routerLink="/emergency">Emergency info</a></div>
     </div>
   </section>
@@ -169,7 +170,7 @@ import { BLOGS, DOCTORS, FAQS, H, IMG, INSURERS, NEWS, PACKAGES, SPECIALITIES, T
   <!-- INSURANCE -->
   <section class="ins" aria-labelledby="h-i">
     <div class="wrap"><h2 id="h-i" class="eyebrow" style="text-align:center">Cashless treatment with leading insurers &amp; schemes</h2></div>
-    <div class="imq" aria-hidden="true"><div class="imt">@for (i of insX; track $index) {<span>🛡 {{ i }}</span>}</div></div>
+    <div class="imq" aria-hidden="true"><div class="imt">@for (i of insX; track $index) {<span><x-ic n="🛡"></x-ic> {{ i }}</span>}</div></div>
     <p class="sr-only">Accepted: {{ insurers.join(', ') }}</p>
   </section>
 
