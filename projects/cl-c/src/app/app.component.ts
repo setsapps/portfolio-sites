@@ -1,13 +1,13 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { LockService, ToastService } from '@shared/core';
-import { LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, ThemePickerComponent, SearchOverlayComponent, ChatbotComponent, BotIntent } from '@shared/ui';
+import { LockService, ThemeService, ToastService } from '@shared/core';
+import { LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, SearchOverlayComponent, ChatbotComponent, BotIntent } from '@shared/ui';
 import { H, SEARCH_INDEX, SPECIALITIES } from './data';
 import { IconComponent } from '@shared/icons';
 
 @Component({
   selector: 'app-root', standalone: true,
-  imports: [IconComponent, RouterOutlet, RouterLink, RouterLinkActive, LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, ThemePickerComponent, SearchOverlayComponent, ChatbotComponent],
+  imports: [IconComponent, RouterOutlet, RouterLink, RouterLinkActive, LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, SearchOverlayComponent, ChatbotComponent],
   template: `
   <div class="util">
     <div class="wrap ut">
@@ -97,13 +97,13 @@ import { IconComponent } from '@shared/icons';
   </nav>
 
   <x-search [items]="index" [popular]="['Cardiologist','Knee replacement','Health check','Lab reports','Gynaecologist']" placeholder="Search doctors, specialities, symptoms, tests…" />
-  <x-lock /><x-checkout /><x-cookies /><x-toasts /><x-theme />
+  <x-lock /><x-checkout /><x-cookies /><x-toasts />
   <x-bot name="Sehat · LH Assistant" avatar="🩺" hint="Namaste! How can I help?" greeting="Sat Sri Akal! I'm Sehat, the Ludhiana Hospital assistant. I can help you book, find a doctor, check packages or get emergency help." [starters]="['Book appointment','Chest pain','Health packages','Lab reports','Insurance']" [intents]="intents" fallback="I'll connect you with a care coordinator. Meanwhile, you can try:" />
   `,
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  lock = inject(LockService); toast = inject(ToastService); router = inject(Router);
+  lock = inject(LockService); toast = inject(ToastService); router = inject(Router); th = inject(ThemeService);
   h = H; specs = SPECIALITIES; index = SEARCH_INDEX;
   solid = signal(false); drawer = signal(false); mega = signal('');
   patientLinks: [string, string, string, string][] = [

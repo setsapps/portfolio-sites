@@ -1,14 +1,14 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { LockService, ToastService } from '@shared/core';
-import { LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, ThemePickerComponent, SearchOverlayComponent, ChatbotComponent, BotIntent } from '@shared/ui';
+import { LockService, ThemeService, ToastService } from '@shared/core';
+import { LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, SearchOverlayComponent, ChatbotComponent, BotIntent } from '@shared/ui';
 import { SEARCH_INDEX } from './data';
 import { IconComponent } from '@shared/icons';
 
 @Component({
   selector: 'app-root', standalone: true,
-  imports: [IconComponent, RouterOutlet, RouterLink, RouterLinkActive, FormsModule, LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, ThemePickerComponent, SearchOverlayComponent, ChatbotComponent],
+  imports: [IconComponent, RouterOutlet, RouterLink, RouterLinkActive, FormsModule, LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, SearchOverlayComponent, ChatbotComponent],
   template: `
   <header class="hd" [class.hide]="hide()">
     <div class="pill glass">
@@ -53,13 +53,13 @@ import { IconComponent } from '@shared/icons';
   </footer>
 
   <x-search [items]="index" [popular]="['Lodge','Aurora','Kayak','Culinary','Summit']" placeholder="Search experiences, stays, events…" />
-  <x-lock /><x-checkout /><x-cookies /><x-toasts /><x-theme />
+  <x-lock /><x-checkout /><x-cookies /><x-toasts />
   <x-bot name="Nova · journey concierge" avatar="✦" hint="Plan a trip with me" greeting="Hi, I'm Nova, your journey concierge. Where should we take you?" [starters]="['Aurora nights','Lakeside lodge','Plan my trip','Group events']" [intents]="intents" fallback="Lovely idea. I can pass that to our concierge team, or try:" />
   `,
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  lock = inject(LockService); toast = inject(ToastService); router = inject(Router); index = SEARCH_INDEX;
+  lock = inject(LockService); toast = inject(ToastService); router = inject(Router); th = inject(ThemeService); index = SEARCH_INDEX;
   menu = signal(false); hide = signal(false); nl = ''; private lastY = 0;
   links: [string, string][] = [['Journey', '/'], ['Experiences', '/experiences'], ['Events', '/events'], ['Plan a trip', '/plan'], ['About', '/about']];
   intents: BotIntent[] = [

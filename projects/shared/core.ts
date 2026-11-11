@@ -14,7 +14,8 @@ export interface SiteConfig {
   key: string;                      // storage namespace
   brand: string;
   dial?: string;                    // phone country code shown in the OTP step
-  fonts?: FontDef[];                // premium font pairings (first = default, already loaded)
+  fonts?: FontDef[];
+  fontScale?: number;               // root text scale (0.9 = one step smaller)                // premium font pairings (first = default, already loaded)
   themes: ThemeDef[];
   lockMode: 'email' | 'otp-referral';
   lockTitle: string;
@@ -27,12 +28,12 @@ export class ThemeService {
   private cfg = inject(SITE);
   private doc = inject(DOCUMENT);
   readonly themes = this.cfg.themes;
-  readonly theme = signal<string>(store.get(this.cfg.key + ':theme') || this.cfg.themes[0].id);
-  readonly fontScale = signal<number>(+(store.get(this.cfg.key + ':fs') || 1));
+  readonly theme = signal<string>(this.cfg.themes[0].id);
+  readonly fontScale = signal<number>(this.cfg.fontScale ?? 1);
   readonly reduceMotion = signal<boolean>(store.get(this.cfg.key + ':rm') === '1' ||
     (typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches));
   readonly fonts = this.cfg.fonts || [];
-  readonly font = signal<string>(store.get(this.cfg.key + ':font') || this.fonts[0]?.id || '');
+  readonly font = signal<string>(this.fonts[0]?.id || '');
   /** inject Google Fonts stylesheets on demand (for previews in the picker and for the chosen pair) */
   loadFont(id: string) {
     const f = this.fonts.find(x => x.id === id); if (!f?.href) return;

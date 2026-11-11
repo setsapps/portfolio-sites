@@ -2,13 +2,13 @@ import { Component, HostListener, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LockService, ThemeService, ToastService } from '@shared/core';
-import { LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, ThemePickerComponent, SearchOverlayComponent, ChatbotComponent, BotIntent } from '@shared/ui';
+import { LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, SearchOverlayComponent, ChatbotComponent, BotIntent } from '@shared/ui';
 import { BRAND, IMG, SEARCH_INDEX } from './data';
 import { IconComponent } from '@shared/icons';
 
 @Component({
   selector: 'app-root', standalone: true,
-  imports: [IconComponent, RouterOutlet, RouterLink, RouterLinkActive, FormsModule, LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, ThemePickerComponent, SearchOverlayComponent, ChatbotComponent],
+  imports: [IconComponent, RouterOutlet, RouterLink, RouterLinkActive, FormsModule, LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, SearchOverlayComponent, ChatbotComponent],
   template: `
   @if (bar()) {
   <div class="ann" role="region" aria-label="Announcement">
@@ -100,7 +100,7 @@ import { IconComponent } from '@shared/icons';
   </footer>
 
   <x-search [items]="index" [popular]="['Mentorship','Webinar','Toolkit','Hotels','Forum']" placeholder="Search events, courses, resources, jobs…" />
-  <x-lock /><x-checkout /><x-cookies /><x-toasts /><x-theme />
+  <x-lock /><x-checkout /><x-cookies /><x-toasts />
   <x-bot name="Rosie · CL-A assistant" avatar="✿" hint="Hi! Ask me anything" greeting="Hi, I'm Rosie! I can help you find events, mentorship, courses or membership info." [starters]="['Upcoming events','Find a mentor','Membership prices','Post a job']" [intents]="intents" fallback="Good question! I'll pass that to our team, or you can try one of these:" />
   `,
   styleUrl: './app.component.scss',
