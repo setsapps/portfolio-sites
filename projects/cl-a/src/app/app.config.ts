@@ -10,7 +10,7 @@ export const appConfig: ApplicationConfig = {
     { provide: SITE, useValue: {
       key: 'cla', dial: '+1',
       fontScale: 0.9,
-      brand: 'CL-A',
+      brand: 'Velora',
       themes: [
         { id: 'rose', label: 'Rosé', swatch: ['#b8235a', '#ef9a86', '#fff7f4'] },
         { id: 'peony', label: 'Peony', swatch: ['#c2185b', '#ff6f9c', '#ff8a65'] },

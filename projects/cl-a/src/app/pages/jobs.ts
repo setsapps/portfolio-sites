@@ -43,8 +43,8 @@ import { IconComponent } from '@shared/icons';
             <h3>About the role</h3>
             <p>Sample description. The employer's full posting appears here with responsibilities, requirements, benefits and how to apply.</p>
             <h3>Why this employer</h3>
-            <p>Signed the CL-A employer pledge on flexible scheduling and transparent pay ranges.</p>
-            <div class="da"><button class="btn btn-p" (click)="lock.gate('Apply with your CL-A profile')">Apply with CL-A profile</button><button class="btn btn-l" (click)="toast.show('Job saved to your list','ok')"><x-ic n="♡"></x-ic> Save</button></div>
+            <p>Signed the Velora employer pledge on flexible scheduling and transparent pay ranges.</p>
+            <div class="da"><button class="btn btn-p" (click)="lock.gate('Apply with your Velora profile')">Apply with Velora profile</button><button class="btn btn-l" (click)="toast.show('Job saved to your list','ok')"><x-ic n="♡"></x-ic> Save</button></div>
           } @else { <div class="ph"><div aria-hidden="true"><x-ic n="💼"></x-ic></div><p>Select a role to see the details.</p></div> }
         </aside>
       </div>

@@ -9,7 +9,7 @@ import { IconComponent } from '@shared/icons';
   template: `
   <section class="page-hero"><img [src]="img.team" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Membership</span></nav>
-      <h1 class="display">Become a woman of <em>CL-A</em></h1><p>Join a community that opens doors, from your first role to your first board seat.</p></div>
+      <h1 class="display">Become a woman of <em>Velora</em></h1><p>Join a community that opens doors, from your first role to your first board seat.</p></div>
   </section>
   <section class="sec">
     <div class="wrap">

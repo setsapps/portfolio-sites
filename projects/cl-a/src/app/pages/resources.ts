@@ -11,7 +11,7 @@ import { IconComponent } from '@shared/icons';
   template: `
   <section class="page-hero"><img [src]="img.talk" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Resources</span></nav>
-      <h1 class="display">The resource <em>library</em></h1><p>Guides, toolkits, templates, webinars and podcasts, curated by the CL-A community. Search, filter and save what you need.</p>
+      <h1 class="display">The resource <em>library</em></h1><p>Guides, toolkits, templates, webinars and podcasts, curated by the Velora community. Search, filter and save what you need.</p>
       <div class="big-search"><label for="rq" class="sr-only">Search the library</label><input id="rq" type="search" placeholder="Try “negotiation”, “policy”, “hiring”…" [ngModel]="q()" (ngModelChange)="q.set($event)"><span aria-hidden="true"><x-ic n="⌕"></x-ic></span></div>
     </div>
   </section>

@@ -1,13 +1,14 @@
 import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { ParallaxDirective } from '@shared/motion';
 import { LockService, RevealDirective, TiltDirective, ToastService } from '@shared/core';
 import { CHAPTERS, EVENTS, EXPERIENCES, IMG } from '../data';
 import type { Journey, FrameScrubber } from '../three-journey';
 import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [IconComponent, RouterLink, DatePipe, RevealDirective, TiltDirective],
+  standalone: true, imports: [IconComponent, ParallaxDirective, RouterLink, DatePipe, RevealDirective, TiltDirective],
   template: `
   <!-- ===== 3D SCROLL JOURNEY ===== -->
   <section class="journey" #journey aria-label="Interactive 3D journey: mountains, lake, lodge and aurora">
@@ -98,7 +99,7 @@ import { IconComponent } from '@shared/icons';
   </section>
 
   <section class="cta-sec" aria-labelledby="h-c">
-    <img [src]="img.lake" alt="" loading="lazy">
+    <img [src]="img.lake" alt="" loading="lazy" class="no-kb" parallax="0.2">
     <div class="wrap ci" reveal><h2 id="h-c">Your next journey <span class="serif">starts here.</span></h2><div class="hb"><a class="btn btn-p" routerLink="/plan">Plan my trip</a><button class="btn btn-o" (click)="lock.gate('Membership')">Become a member</button></div></div>
   </section>
   `,

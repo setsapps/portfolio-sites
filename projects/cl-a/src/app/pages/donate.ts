@@ -73,6 +73,6 @@ export class DonatePage {
   feeAmt = computed(() => Math.round(this.amt() * 0.03 * 100) / 100);
   total = computed(() => Math.round((this.amt() + (this.fees ? this.feeAmt() : 0)) * 100) / 100);
   impact = computed(() => { const a = this.amt(); return a >= 500 ? 'Example: could underwrite a full Forum scholarship.' : a >= 100 ? 'Example: could fund a seat in a Mentor Circle.' : a > 0 ? 'Example: helps keep webinars free for everyone.' : 'Choose an amount to see its impact.'; });
-  ways = [['Corporate matching', '🏢', 'Double your gift through your employer'], ['Gift of securities', '📈', 'Donate shares tax-efficiently'], ['Legacy giving', '🕊', 'Include CL-A in your will'], ['Sponsor an event', '🎟', 'Put your brand behind the Forum']];
+  ways = [['Corporate matching', '🏢', 'Double your gift through your employer'], ['Gift of securities', '📈', 'Donate shares tax-efficiently'], ['Legacy giving', '🕊', 'Include Velora in your will'], ['Sponsor an event', '🎟', 'Put your brand behind the Forum']];
   give() { const t = this.total(); this.lock.pay(`Donation · ${this.freq()}`, t, 'CAD', [[this.fund, this.amt()], ['Processing fees', this.fees ? this.feeAmt() : 0]]); }
 }

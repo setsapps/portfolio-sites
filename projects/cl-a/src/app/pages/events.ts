@@ -152,7 +152,7 @@ export class EventsPage {
   }
   ics(e: EventItem) {
     const d = e.date.replace(/-/g, '');
-    const body = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//CL-A//Events//EN', 'BEGIN:VEVENT', `UID:${e.id}@cl-a`, `DTSTART;VALUE=DATE:${d}`, `SUMMARY:${e.title}`, `LOCATION:${e.place}`, `DESCRIPTION:${e.desc}`, 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+    const body = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Velora//Events//EN', 'BEGIN:VEVENT', `UID:${e.id}@cl-a`, `DTSTART;VALUE=DATE:${d}`, `SUMMARY:${e.title}`, `LOCATION:${e.place}`, `DESCRIPTION:${e.desc}`, 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([body], { type: 'text/calendar' })); a.download = `cl-a-event-${e.id}.ics`; a.click();
     this.toast.show('Calendar file downloaded', 'ok');
   }

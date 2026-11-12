@@ -1,6 +1,7 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { MotionService } from '@shared/motion';
 import { LockService, ThemeService, ToastService } from '@shared/core';
 import { LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, SearchOverlayComponent, ChatbotComponent, BotIntent } from '@shared/ui';
 import { BRAND, IMG, SEARCH_INDEX } from './data';
@@ -19,8 +20,8 @@ import { IconComponent } from '@shared/icons';
   }
   <header class="hd" [class.solid]="solid()" [class.over]="overHero()">
     <div class="wrap nav">
-      <a routerLink="/" class="logo" aria-label="CL-A home">
-        <span class="mk" aria-hidden="true"><svg viewBox="0 0 48 48"><defs><linearGradient id="lg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#e2577f"/><stop offset="1" stop-color="#b8235a"/></linearGradient></defs><circle cx="24" cy="24" r="22" fill="url(#lg)"/><circle cx="24" cy="24" r="17" fill="none" stroke="#fff" stroke-opacity=".5" stroke-dasharray="2 3"/><text x="24" y="31" text-anchor="middle" font-family="Bodoni Moda,Georgia,serif" font-style="italic" font-size="20" fill="#fff">A</text></svg></span>
+      <a routerLink="/" class="logo" aria-label="Velora home">
+        <span class="mk" aria-hidden="true"><svg viewBox="0 0 48 48"><defs><linearGradient id="lg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#f09bb9"/><stop offset="1" stop-color="#c23f74"/></linearGradient></defs><circle cx="24" cy="24" r="22" fill="url(#lg)"/><circle cx="24" cy="24" r="17" fill="none" stroke="#fff" stroke-opacity=".5" stroke-dasharray="2 3"/><text x="24" y="31" text-anchor="middle" font-family="Bodoni Moda,Georgia,serif" font-style="italic" font-size="20" fill="#fff">V</text></svg></span>
         <span class="lt"><b>{{ brand.name }}</b><small>{{ brand.long }}</small></span>
       </a>
       <nav aria-label="Primary" class="pn">
@@ -87,7 +88,7 @@ import { IconComponent } from '@shared/icons';
       <div class="ft-g">
         <div class="ft-brand">
           <a routerLink="/" class="logo"><span class="lt"><b>{{ brand.name }}</b><small>{{ brand.long }}</small></span></a>
-          <p>A non-profit association creating opportunity for women across recreation, tourism and hospitality.</p>
+          <p>A non-profit association creating opportunity for women across food, hospitality and lifestyle.</p>
           <form class="nl" (ngSubmit)="sub()"><label for="nl" class="sr-only">Email for newsletter</label><input id="nl" name="nl" type="email" [(ngModel)]="nl" placeholder="Your email" autocomplete="email"><button class="btn btn-p">Subscribe</button></form>
           <div class="soc">@for (s of socials; track s) {<a href="#" [attr.aria-label]="s">{{ s[0] }}</a>}</div>
         </div>
@@ -101,7 +102,7 @@ import { IconComponent } from '@shared/icons';
 
   <x-search [items]="index" [popular]="['Mentorship','Webinar','Toolkit','Hotels','Forum']" placeholder="Search events, courses, resources, jobs…" />
   <x-lock /><x-checkout /><x-cookies /><x-toasts />
-  <x-bot name="Rosie · CL-A assistant" avatar="✿" hint="Hi! Ask me anything" greeting="Hi, I'm Rosie! I can help you find events, mentorship, courses or membership info." [starters]="['Upcoming events','Find a mentor','Membership prices','Post a job']" [intents]="intents" fallback="Good question! I'll pass that to our team, or you can try one of these:" />
+  <x-bot name="Rosie · Velora assistant" avatar="✿" hint="Hi! Ask me anything" greeting="Hi, I'm Rosie! I can help you find events, mentorship, courses or membership info." [starters]="['Upcoming events','Find a mentor','Membership prices','Post a job']" [intents]="intents" fallback="Good question! I'll pass that to our team, or you can try one of these:" />
   `,
   styleUrl: './app.component.scss',
 })
@@ -122,6 +123,7 @@ export class AppComponent {
     { keys: ['login', 'sign in', 'account', 'lounge'], reply: 'The Members’ Lounge needs a member sign-in. Let me open that for you.', lock: 'Members’ Lounge' },
   ];
   constructor() {
+    inject(MotionService).init();
     this.router.events.subscribe(e => { if (e instanceof NavigationEnd) { this.drawer.set(false); this.mega.set(''); this.onScroll(); } });
   }
   @HostListener('window:scroll') onScroll() { this.solid.set(window.scrollY > 40); }

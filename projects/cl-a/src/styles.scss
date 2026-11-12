@@ -1,12 +1,12 @@
 @use '../../shared/base.scss';
 
-/* CL-A — premium rosé system. Default theme = "rose" (warm). */
+/* Velora — premium rosé system. Default theme = "rose" (warm). */
 :root,[data-theme=rose]{
-  --bg:#fff7f4; --bg-2:#fdeae6; --surface:#ffffff; --text:#2a1320; --muted:#7b5866; --line:#f0d6d4;
-  --primary:#b8235a; --on-primary:#fff; --primary-2:#e2577f; --accent:#d9a066; --on-accent:#2a1320;
-  --blush:#f9dcdf; --salmon:#ef9a86; --plum:#4a1834; --gold:#c9974e;
-  --hero-ov:linear-gradient(105deg,rgba(42,19,32,.86) 0%,rgba(122,24,64,.55) 48%,rgba(184,35,90,.08) 100%);
-  --grad:linear-gradient(120deg,#b8235a,#e2577f 45%,#ef9a86);
+  --bg:#fffafb; --bg-2:#fdeef3; --surface:#ffffff; --text:#3b1d2c; --muted:#86606f; --line:#f6dfe6;
+  --primary:#c23f74; --on-primary:#fff; --primary-2:#ec8fb0; --accent:#e9b9a4; --on-accent:#3b1d2c;
+  --blush:#fde4ec; --salmon:#f7b3c6; --plum:#4f1f39; --gold:#d4a373;
+  --hero-ov:linear-gradient(105deg,rgba(79,31,57,.74) 0%,rgba(194,63,116,.42) 46%,rgba(253,228,236,.04) 100%);
+  --grad:linear-gradient(120deg,#c23f74,#ec8fb0 50%,#f6c6d3);
   --focus:#1d4ed8; --danger:#c0262d; --ok:#1e7a4f;
   --font-display:'Cormorant Garamond',Georgia,serif; --font-body:'Montserrat',system-ui,sans-serif; --font-script:'Pinyon Script',cursive;
   --display-weight:600; --max:1320px; --r:22px;

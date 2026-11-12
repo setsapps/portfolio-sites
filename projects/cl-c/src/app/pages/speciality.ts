@@ -57,7 +57,7 @@ export class SpecialityPage {
   @Input() set slug(v: string) { this.slugS.set(v); const s = SPECIALITIES.find(x => x.slug === v); if (s) this.title.setTitle(s.name + ' · Ludhiana Hospital'); }
   s = computed(() => SPECIALITIES.find(x => x.slug === this.slugS()));
   docs = computed(() => DOCTORS.filter(d => d.slug === this.slugS()));
-  hero = computed(() => [IMG.care, IMG.surgery, IMG.icu, IMG.lab, IMG.hero2][SPECIALITIES.findIndex(x => x.slug === this.slugS()) % 5]);
+  hero = computed(() => ({ cardiology: IMG.cardiac, neurology: IMG.icu, orthopaedics: IMG.surgery, oncology: IMG.lab, 'mother-child': IMG.nurse, emergency: IMG.hero, diabetes: IMG.check } as Record<string, string>)[this.slugS()] || IMG.care);
   faqs = FAQS.slice(0, 4);
   tabs = [['treat', 'Treatments'], ['docs', 'Doctors'], ['faq', 'FAQs']];
 }

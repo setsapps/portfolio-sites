@@ -10,7 +10,7 @@ import { IMG } from '../data';
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>Rise Leadership Forum</span></nav>
       <div class="eyebrow" style="color:var(--salmon)">April 22, 2027 · Vancouver</div>
       <h1 class="display">Rise Leadership <em>Forum</em></h1>
-      <p>A day of keynotes, candid panels and breakout labs for women leading across tourism, hospitality and recreation.</p>
+      <p>A day of keynotes, candid panels and breakout labs for women leading across food, hospitality and lifestyle.</p>
       <div class="cd" role="timer" aria-label="Countdown to the Forum">
         @for (u of units(); track u[1]) { <div><b>{{ u[0] }}</b><span>{{ u[1] }}</span></div> }
       </div>
@@ -82,11 +82,11 @@ export class SummitPage implements OnInit, OnDestroy {
   units = signal<[string, string][]>([]); private t?: ReturnType<typeof setInterval>;
   tracks = ['Lead', 'Grow', 'Build'] as const; track = signal<'Lead' | 'Grow' | 'Build'>('Lead');
   agenda: Record<string, [string, string, string][]> = {
-    Lead: [['08:30', 'Registration & breakfast', 'Coffee, pastries and first connections.'], ['09:15', 'Opening keynote', 'Leading through a season of change.'], ['10:30', 'Panel: The path to GM', 'Hotel and resort leaders on getting the top job.'], ['13:30', 'Board-readiness lab', 'Hands-on session with current board chairs.'], ['17:00', 'Evening reception', 'Drinks, music and the CL-A awards.']],
+    Lead: [['08:30', 'Registration & breakfast', 'Coffee, pastries and first connections.'], ['09:15', 'Opening keynote', 'Leading through a season of change.'], ['10:30', 'Panel: The path to GM', 'Hotel and resort leaders on getting the top job.'], ['13:30', 'Board-readiness lab', 'Hands-on session with current board chairs.'], ['17:00', 'Evening reception', 'Drinks, music and the Velora awards.']],
     Grow: [['09:15', 'Opening keynote', 'Shared with all tracks.'], ['10:30', 'Negotiation clinic', 'Role-play with expert coaches.'], ['13:30', 'Personal brand workshop', 'LinkedIn, speaking and visibility.'], ['15:00', 'Speed mentoring', 'Ten minutes each with six mentors.']],
-    Build: [['09:15', 'Opening keynote', 'Shared with all tracks.'], ['10:30', 'From idea to owner', 'Founders in food, travel and adventure.'], ['13:30', 'Financing your venture', 'Lenders and investors in conversation.'], ['15:00', 'Pitch lab', 'Five founders, five minutes, real feedback.']],
+    Build: [['09:15', 'Opening keynote', 'Shared with all tracks.'], ['10:30', 'From idea to owner', 'Founders in food, wellness and lifestyle.'], ['13:30', 'Financing your venture', 'Lenders and investors in conversation.'], ['15:00', 'Pitch lab', 'Five founders, five minutes, real feedback.']],
   };
-  speakers = [['Keynote speaker', 'To be announced', '#b8235a'], ['Hotel general manager', 'Panel', '#4a1834'], ['Chef-owner', 'Fireside chat', '#c9974e'], ['Tourism founder', 'Build track', '#e2577f'], ['Board chair', 'Lab lead', '#7a2a55'], ['Executive coach', 'Grow track', '#d9a066']];
+  speakers = [['Keynote speaker', 'To be announced', '#b8235a'], ['Hotel general manager', 'Panel', '#4a1834'], ['Chef-owner', 'Fireside chat', '#c9974e'], ['Food brand founder', 'Build track', '#e2577f'], ['Board chair', 'Lab lead', '#7a2a55'], ['Executive coach', 'Grow track', '#d9a066']];
   tickets = [
     { n: 'Virtual', p: 95, was: 0, hot: false, f: ['Live-stream of keynotes and panels', '30-day replay access', 'Digital networking lounge'] },
     { n: 'Early-bird', p: 295, was: 395, hot: true, f: ['Full-day in-person access', 'All three tracks', 'Lunch and evening reception', 'Speed mentoring'] },

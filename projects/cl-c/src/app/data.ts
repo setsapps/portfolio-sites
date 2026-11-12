@@ -11,19 +11,12 @@ export const H = {
 };
 
 const U = (id: string, w = 1200) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
+const L = (n: string, sm = false) => `img/${n}${sm ? '-sm' : ''}.webp`;
 export const IMG = {
-  hero: U('photo-1519494026892-80bbd2d6fd0d', 1800),
-  hero2: U('photo-1586773860418-d37222d8fce3', 1600),
-  hero3: U('photo-1538108149393-fbbd81895907', 1600),
-  building: U('photo-1587351021759-3e566b6af7cc', 1400),
-  care: U('photo-1576091160550-2173dba999ef', 1200),
-  nurse: U('photo-1596522868339-a476e327e5e2', 1200),
-  lab: U('photo-1579684385127-1ef15d508118', 1200),
-  surgery: U('photo-1551601651-2a8555f1a136', 1200),
-  family: U('photo-1584515933487-779824d29309', 1200),
-  icu: U('photo-1516549655169-df83a0774514', 1200),
-  check: U('photo-1666214280557-f1b5022eb634', 1200),
-  docs: [U('photo-1612349317150-e413f6a5b16d', 500), U('photo-1622253692010-333f2da6031d', 500), U('photo-1559839734-2b71ea197ec2', 500), U('photo-1582750433449-648ed127bb54', 500), U('photo-1659353888906-adb3e0041693', 500), U('photo-1631217868264-e5b90bb7e133', 500), U('photo-1527613426441-4da17471b66d', 500), U('photo-1594824476967-48c8b964273f', 500)],
+  hero: L('lh-hero-1'), hero2: L('lh-hero-2'), hero3: L('lh-hero-3'), building: L('lh-hero-3'),
+  care: L('lh-hero-2'), nurse: L('lh-mother-child', true), lab: L('lh-lab'), surgery: L('lh-ortho'), family: L('lh-family', true),
+  icu: L('lh-neuro'), check: L('lh-health-check'), cardiac: L('lh-cardiac'),
+  docs: [1, 2, 3, 4, 5, 6, 7, 8].map(i => `img/lh-doc-${i}.webp`),
 };
 
 export interface Speciality { slug: string; name: string; icon: string; blurb: string; treatments: string[]; coe?: boolean; }
@@ -45,18 +38,18 @@ export const SPECIALITIES: Speciality[] = [
 export interface Doctor { id: number; name: string; spec: string; slug: string; deg: string; exp: number; langs: string[]; gender: 'F' | 'M'; days: string[]; fee: number; img: string; video: boolean; }
 const D = IMG.docs;
 export const DOCTORS: Doctor[] = [
-  { id: 1, name: 'Dr. Anjali Mehra', spec: 'Interventional Cardiologist', slug: 'cardiology', deg: 'MBBS, MD, DM (Cardiology)', exp: 18, langs: ['English', 'Hindi', 'Punjabi'], gender: 'F', days: ['Mon', 'Wed', 'Fri'], fee: 900, img: D[2], video: true },
-  { id: 2, name: 'Dr. Rajiv Sandhu', spec: 'Cardiothoracic Surgeon', slug: 'cardiology', deg: 'MBBS, MS, MCh (CTVS)', exp: 22, langs: ['English', 'Punjabi'], gender: 'M', days: ['Tue', 'Thu', 'Sat'], fee: 1200, img: D[0], video: false },
-  { id: 3, name: 'Dr. Harpreet Gill', spec: 'Neurologist', slug: 'neurology', deg: 'MBBS, MD, DM (Neurology)', exp: 14, langs: ['English', 'Hindi', 'Punjabi'], gender: 'F', days: ['Mon', 'Tue', 'Thu'], fee: 1000, img: D[3], video: true },
-  { id: 4, name: 'Dr. Vikram Arora', spec: 'Orthopaedic & Joint Replacement Surgeon', slug: 'orthopaedics', deg: 'MBBS, MS (Ortho), Fellowship Arthroplasty', exp: 16, langs: ['English', 'Hindi'], gender: 'M', days: ['Mon', 'Wed', 'Sat'], fee: 800, img: D[1], video: true },
-  { id: 5, name: 'Dr. Simran Kaur', spec: 'Medical Oncologist', slug: 'oncology', deg: 'MBBS, MD, DM (Medical Oncology)', exp: 12, langs: ['English', 'Hindi', 'Punjabi'], gender: 'F', days: ['Tue', 'Fri'], fee: 1100, img: D[5], video: true },
-  { id: 6, name: 'Dr. Amit Bansal', spec: 'Gastroenterologist', slug: 'gastro', deg: 'MBBS, MD, DM (Gastro)', exp: 15, langs: ['English', 'Hindi'], gender: 'M', days: ['Mon', 'Thu', 'Sat'], fee: 900, img: D[4], video: false },
-  { id: 7, name: 'Dr. Neha Kapoor', spec: 'Obstetrician & Gynaecologist', slug: 'mother-child', deg: 'MBBS, MS (OBG), FMAS', exp: 13, langs: ['English', 'Hindi', 'Punjabi'], gender: 'F', days: ['Mon', 'Tue', 'Wed', 'Fri'], fee: 700, img: D[6], video: true },
-  { id: 8, name: 'Dr. Gurpreet Dhillon', spec: 'Paediatrician & Neonatologist', slug: 'mother-child', deg: 'MBBS, MD (Paeds), Fellowship Neonatology', exp: 11, langs: ['English', 'Punjabi'], gender: 'M', days: ['Tue', 'Thu', 'Sat'], fee: 700, img: D[7], video: true },
-  { id: 9, name: 'Dr. Kavita Sharma', spec: 'Nephrologist', slug: 'nephrology', deg: 'MBBS, MD, DM (Nephrology)', exp: 17, langs: ['English', 'Hindi'], gender: 'F', days: ['Wed', 'Fri'], fee: 900, img: D[6], video: false },
-  { id: 10, name: 'Dr. Manpreet Grewal', spec: 'Pulmonologist', slug: 'pulmonology', deg: 'MBBS, MD (Pulmonary Medicine)', exp: 10, langs: ['English', 'Punjabi', 'Hindi'], gender: 'M', days: ['Mon', 'Wed', 'Fri'], fee: 800, img: D[0], video: true },
-  { id: 11, name: 'Dr. Ritu Malhotra', spec: 'Endocrinologist', slug: 'diabetes', deg: 'MBBS, MD, DM (Endocrinology)', exp: 9, langs: ['English', 'Hindi'], gender: 'F', days: ['Tue', 'Thu'], fee: 850, img: D[3], video: true },
-  { id: 12, name: 'Dr. Sukhwinder Brar', spec: 'Emergency Physician', slug: 'emergency', deg: 'MBBS, MD (Emergency Medicine)', exp: 12, langs: ['English', 'Punjabi'], gender: 'M', days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], fee: 600, img: D[1], video: false },
+  { id: 1, name: 'Dr. Anjali Mehra', spec: 'Interventional Cardiologist', slug: 'cardiology', deg: 'MBBS, MD, DM (Cardiology)', exp: 18, langs: ['English', 'Hindi', 'Punjabi'], gender: 'F', days: ['Mon', 'Wed', 'Fri'], fee: 900, img: D[0], video: true },
+  { id: 2, name: 'Dr. Rajiv Sandhu', spec: 'Cardiothoracic Surgeon', slug: 'cardiology', deg: 'MBBS, MS, MCh (CTVS)', exp: 22, langs: ['English', 'Punjabi'], gender: 'M', days: ['Tue', 'Thu', 'Sat'], fee: 1200, img: D[4], video: false },
+  { id: 3, name: 'Dr. Harpreet Gill', spec: 'Neurologist', slug: 'neurology', deg: 'MBBS, MD, DM (Neurology)', exp: 14, langs: ['English', 'Hindi', 'Punjabi'], gender: 'F', days: ['Mon', 'Tue', 'Thu'], fee: 1000, img: D[1], video: true },
+  { id: 4, name: 'Dr. Vikram Arora', spec: 'Orthopaedic & Joint Replacement Surgeon', slug: 'orthopaedics', deg: 'MBBS, MS (Ortho), Fellowship Arthroplasty', exp: 16, langs: ['English', 'Hindi'], gender: 'M', days: ['Mon', 'Wed', 'Sat'], fee: 800, img: D[6], video: true },
+  { id: 5, name: 'Dr. Simran Kaur', spec: 'Medical Oncologist', slug: 'oncology', deg: 'MBBS, MD, DM (Medical Oncology)', exp: 12, langs: ['English', 'Hindi', 'Punjabi'], gender: 'F', days: ['Tue', 'Fri'], fee: 1100, img: D[2], video: true },
+  { id: 6, name: 'Dr. Amit Bansal', spec: 'Gastroenterologist', slug: 'gastro', deg: 'MBBS, MD, DM (Gastro)', exp: 15, langs: ['English', 'Hindi'], gender: 'M', days: ['Mon', 'Thu', 'Sat'], fee: 900, img: D[7], video: false },
+  { id: 7, name: 'Dr. Neha Kapoor', spec: 'Obstetrician & Gynaecologist', slug: 'mother-child', deg: 'MBBS, MS (OBG), FMAS', exp: 13, langs: ['English', 'Hindi', 'Punjabi'], gender: 'F', days: ['Mon', 'Tue', 'Wed', 'Fri'], fee: 700, img: D[3], video: true },
+  { id: 8, name: 'Dr. Gurpreet Dhillon', spec: 'Paediatrician & Neonatologist', slug: 'mother-child', deg: 'MBBS, MD (Paeds), Fellowship Neonatology', exp: 11, langs: ['English', 'Punjabi'], gender: 'M', days: ['Tue', 'Thu', 'Sat'], fee: 700, img: D[5], video: true },
+  { id: 9, name: 'Dr. Kavita Sharma', spec: 'Nephrologist', slug: 'nephrology', deg: 'MBBS, MD, DM (Nephrology)', exp: 17, langs: ['English', 'Hindi'], gender: 'F', days: ['Wed', 'Fri'], fee: 900, img: D[1], video: false },
+  { id: 10, name: 'Dr. Manpreet Grewal', spec: 'Pulmonologist', slug: 'pulmonology', deg: 'MBBS, MD (Pulmonary Medicine)', exp: 10, langs: ['English', 'Punjabi', 'Hindi'], gender: 'M', days: ['Mon', 'Wed', 'Fri'], fee: 800, img: D[4], video: true },
+  { id: 11, name: 'Dr. Ritu Malhotra', spec: 'Endocrinologist', slug: 'diabetes', deg: 'MBBS, MD, DM (Endocrinology)', exp: 9, langs: ['English', 'Hindi'], gender: 'F', days: ['Tue', 'Thu'], fee: 850, img: D[2], video: true },
+  { id: 12, name: 'Dr. Sukhwinder Brar', spec: 'Emergency Physician', slug: 'emergency', deg: 'MBBS, MD (Emergency Medicine)', exp: 12, langs: ['English', 'Punjabi'], gender: 'M', days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], fee: 600, img: D[6], video: false },
 ];
 
 export interface Pkg { id: number; name: string; cat: 'Men' | 'Women' | 'Senior' | 'Heart' | 'Diabetes' | 'Basic'; tests: number; price: number; mrp: number; hot?: boolean; incl: string[]; }

@@ -14,7 +14,7 @@ import { IconComponent } from '@shared/icons';
   <section class="sec">
     <div class="wrap blur-lock" reveal>
       <div class="inner app card">
-        <aside><b>CL-A</b>@for (n of nav; track n) {<span>{{ n }}</span>}</aside>
+        <aside><b>Velora</b>@for (n of nav; track n) {<span>{{ n }}</span>}</aside>
         <div class="main">
           <div class="hi"><div><small>Welcome back</small><h2 class="display">Member name</h2></div><div class="av"></div></div>
           <div class="kp">@for (k of ['Courses','Tickets','Saved','Circle']; track k) {<div class="k"><b>•</b><span>{{ k }}</span></div>}</div>

@@ -1,5 +1,6 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { MotionService } from '@shared/motion';
 import { LockService, ThemeService, ToastService } from '@shared/core';
 import { LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, SearchOverlayComponent, ChatbotComponent, BotIntent } from '@shared/ui';
 import { H, SEARCH_INDEX, SPECIALITIES } from './data';
@@ -125,7 +126,8 @@ export class AppComponent {
     { keys: ['timing', 'visiting', 'hours'], reply: 'OPD: Mon–Sat 9 am – 5 pm. Emergency, pharmacy and lab are open 24×7. Ward visiting hours are 4–7 pm.' },
     { keys: ['location', 'address', 'direction', 'parking'], reply: 'We are in Ludhiana, Punjab, with visitor parking on site. Opening directions…', route: '/contact' },
   ];
-  constructor() { this.router.events.subscribe(e => { if (e instanceof NavigationEnd) { this.drawer.set(false); this.mega.set(''); } }); }
+  constructor() {
+    inject(MotionService).init(); this.router.events.subscribe(e => { if (e instanceof NavigationEnd) { this.drawer.set(false); this.mega.set(''); } }); }
   @HostListener('window:scroll') onScroll() { this.solid.set(window.scrollY > 30); }
   @HostListener('document:keydown.escape') esc() { this.mega.set(''); this.drawer.set(false); }
   lang(e: Event) { const v = (e.target as HTMLSelectElement).value; if (v !== 'English') this.toast.show(`${v} translation is enabled in the live site (multilingual CMS).`, 'info'); }

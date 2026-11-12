@@ -187,7 +187,7 @@ import { IconComponent } from '@shared/icons';
 export class HomePage implements OnInit, OnDestroy {
   lock = inject(LockService); toast = inject(ToastService); router = inject(Router);
   h = H; specs = SPECIALITIES; coe = SPECIALITIES.filter(s => s.coe); docs = DOCTORS; pkgs = PACKAGES.slice(1, 5); tests = TESTIMONIALS; news = NEWS; blogs = BLOGS.slice(0, 3); faqs = FAQS; insurers = INSURERS; insX = [...INSURERS, ...INSURERS];
-  slides = [IMG.hero, IMG.hero2, IMG.hero3]; coeImg = [IMG.care, IMG.icu, IMG.surgery, IMG.lab, IMG.check, IMG.nurse, IMG.hero2];
+  slides = [IMG.hero, IMG.hero2, IMG.hero3]; coeImg = [IMG.cardiac, IMG.icu, IMG.surgery, IMG.lab, IMG.check, IMG.nurse, IMG.hero];
   ftabs = ['Doctor', 'Symptom', 'Health check']; ftab = signal('Doctor'); fSpec = ''; fName = ''; symptom = ''; pkFor = 'Men';
   slide = signal(0); ci = signal(0); tool = signal('BMI'); hcm = signal(168); wkg = signal(72); lmp = signal(new Date(Date.now() - 60 * 864e5).toISOString().slice(0, 10));
   quick: [string, string, string, boolean, string][] = [

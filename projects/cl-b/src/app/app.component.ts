@@ -1,6 +1,7 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { MotionService } from '@shared/motion';
 import { LockService, ThemeService, ToastService } from '@shared/core';
 import { LockModalComponent, CheckoutComponent, CookieConsentComponent, ToastsComponent, SearchOverlayComponent, ChatbotComponent, BotIntent } from '@shared/ui';
 import { SEARCH_INDEX } from './data';
@@ -69,7 +70,8 @@ export class AppComponent {
     { keys: ['event', 'group', 'conference', 'summit'], reply: 'We host retreats, summits and team journeys. Opening events…', route: '/events' },
     { keys: ['book', 'price', 'pay'], reply: 'You can book any experience securely. Member rates need a sign-in.', lock: 'Booking' },
   ];
-  constructor() { this.router.events.subscribe(e => { if (e instanceof NavigationEnd) this.menu.set(false); }); }
+  constructor() {
+    inject(MotionService).init(); this.router.events.subscribe(e => { if (e instanceof NavigationEnd) this.menu.set(false); }); }
   @HostListener('window:scroll') onScroll() { const y = scrollY; this.hide.set(y > this.lastY && y > 300); this.lastY = y; }
   @HostListener('document:keydown.escape') esc() { this.menu.set(false); }
   sub() { if (!/^\S+@\S+\.\S+$/.test(this.nl)) { this.toast.show('Please enter a valid email', 'warn'); return; } this.toast.show('Welcome aboard. Journey notes are on their way.', 'ok'); this.nl = ''; }

@@ -1,17 +1,10 @@
 // CL-B — placeholder brand + sample content (tourism & hospitality)
 const U = (id: string, w = 1200) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=70`;
+const L = (n: string, sm = false) => `img/${n}${sm ? '-sm' : ''}.webp`;
 export const IMG = {
-  lake: U('photo-1503614472-8c93d56e92ce', 1600),
-  lodge: U('photo-1589129140837-67287c22521b', 1200),
-  cabin: U('photo-1587381420270-3e1a5b9e6904', 1200),
-  hike: U('photo-1501555088652-021faa106b9b', 1200),
-  hike2: U('photo-1533240332313-0db49b459ad6', 1200),
-  banff: U('photo-1561134643-668f9057cce4', 1200),
-  lobby: U('photo-1566073771259-6a8506099945', 1200),
-  chef: U('photo-1709837167719-1ff90bdbbac5', 1200),
-  aurora: U('photo-1531366936337-7c912a4589a7', 1200),
-  kayak: U('photo-1503614472-8c93d56e92ce', 1200),
-  summit: U('photo-1540575467063-178a50c2df87', 1200),
+  lake: L('clb-lake'), lodge: L('clb-lodge', true), cabin: L('clb-sauna', true), hike: L('clb-hike', true), hike2: L('clb-hike'),
+  banff: L('clb-lake', true), lobby: L('clb-boutique', true), chef: L('clb-chefs-table', true), aurora: L('clb-aurora-dome', true),
+  kayak: L('clb-paddle', true), summit: L('clb-retreat', true), retreat: L('clb-retreat'),
 };
 
 export const CHAPTERS = [

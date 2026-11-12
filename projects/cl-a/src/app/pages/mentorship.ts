@@ -51,8 +51,8 @@ import { IMG } from '../data';
 
   <section class="sec" style="padding-top:0">
     <div class="wrap two">
-      <div class="side card" reveal><div class="eyebrow">For mentees</div><h2 class="display">What you get</h2><ul>@for (x of mentee; track x) {<li>{{ x }}</li>}</ul><button class="btn btn-p" (click)="lock.gate('Mentee application')">Apply as a mentee</button></div>
-      <div class="side card dark" reveal="120"><div class="eyebrow">For mentors</div><h2 class="display">Lift as you climb</h2><ul>@for (x of mentor; track x) {<li>{{ x }}</li>}</ul><button class="btn btn-p" (click)="lock.gate('Mentor application')">Volunteer as a mentor</button></div>
+      <div class="side card rv-left" reveal><div class="eyebrow">For mentees</div><h2 class="display">What you get</h2><ul>@for (x of mentee; track x) {<li>{{ x }}</li>}</ul><button class="btn btn-p" (click)="lock.gate('Mentee application')">Apply as a mentee</button></div>
+      <div class="side card dark rv-right" reveal="120"><div class="eyebrow">For mentors</div><h2 class="display">Lift as you climb</h2><ul>@for (x of mentor; track x) {<li>{{ x }}</li>}</ul><button class="btn btn-p" (click)="lock.gate('Mentor application')">Volunteer as a mentor</button></div>
     </div>
   </section>
   `,
@@ -88,7 +88,7 @@ export class MentorshipPage {
   steps = [['Apply', 'Tell us your goals and what you want from a mentor.'], ['Match', 'We group five mentees with one mentor by sector and goals.'], ['Meet', 'Monthly circle sessions plus one-to-one check-ins.'], ['Grow', 'Finish with a plan, a network and a certificate.']];
   qs = [
     { t: 'Where are you in your career?', o: ['Early career (0–3 yrs)', 'Mid-level (4–10 yrs)', 'Senior / executive', 'Changing careers'] },
-    { t: 'Which sector are you in?', o: ['Hotels & lodging', 'Food & beverage', 'Tourism & travel', 'Recreation & parks'] },
+    { t: 'Which sector are you in?', o: ['Hotels & lodging', 'Food & beverage', 'Wellness & spa', 'Retail & lifestyle'] },
     { t: 'What is your main goal?', o: ['Get promoted', 'Start a business', 'Build confidence', 'Join a board'] },
   ];
   q = signal(0); answers: string[] = [];

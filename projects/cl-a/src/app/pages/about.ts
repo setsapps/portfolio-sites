@@ -8,7 +8,7 @@ import { IMG, TEAM } from '../data';
   template: `
   <section class="page-hero"><img [src]="img.talk" alt="" fetchpriority="high">
     <div class="wrap"><nav class="crumbs" aria-label="Breadcrumb"><a routerLink="/">Home</a> / <span>About</span></nav>
-      <h1 class="display">Built by women who <em>run the floor</em></h1><p>CL-A is a registered non-profit created to help women advance in recreation, tourism and hospitality, from the front desk to the boardroom.</p></div>
+      <h1 class="display">Built by women who <em>run the floor</em></h1><p>Velora is a registered non-profit created to help women advance in food, hospitality and lifestyle, from the front desk to the boardroom.</p></div>
   </section>
   <section class="sec">
     <div class="wrap mv">

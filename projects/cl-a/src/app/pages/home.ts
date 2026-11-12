@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { ParallaxDirective } from '@shared/motion';
 import { LockService, RevealDirective, TiltDirective } from '@shared/core';
 import { EVENTS, IMG, JOURNEY, PARTNERS, PROGRAMS, RESOURCES, STORIES } from '../data';
 import { IconComponent } from '@shared/icons';
 
 @Component({
-  standalone: true, imports: [IconComponent, RouterLink, DatePipe, RevealDirective, TiltDirective],
+  standalone: true, imports: [IconComponent, ParallaxDirective, RouterLink, DatePipe, RevealDirective, TiltDirective],
   template: `
   <!-- HERO -->
   <section class="hero" aria-labelledby="h1">
@@ -19,9 +20,9 @@ import { IconComponent } from '@shared/icons';
         <h1 id="h1" class="display">
           <span class="ln"><span>Women who</span></span>
           <span class="ln"><span><em class="script">shape</em> how the</span></span>
-          <span class="ln"><span>world travels.</span></span>
+          <span class="ln"><span>world gathers.</span></span>
         </h1>
-        <p class="lede">The network for women building careers in recreation, tourism and hospitality: events that open doors, mentors who've walked the path, and learning built by operators.</p>
+        <p class="lede">The network for women building careers in food, hospitality and lifestyle: events that open doors, mentors who've walked the path, and learning built by operators.</p>
         <div class="cta"><a class="btn btn-p" routerLink="/membership">Become a member</a><a class="btn btn-o" routerLink="/events">Explore events</a></div>
         <div class="dots" role="group" aria-label="Hero images">
           @for (s of slides; track s; let i = $index) { <button [attr.aria-pressed]="i===slide()" [attr.aria-label]="'Show image ' + (i+1)" (click)="go(i)"></button> }
@@ -38,13 +39,13 @@ import { IconComponent } from '@shared/icons';
 
   <!-- PATHWAYS -->
   <section class="paths wrap" aria-label="Choose your path">
-    <a class="path p1" routerLink="/membership" tilt reveal>
+    <a class="path p1 rv-left" routerLink="/membership" tilt reveal>
       <span class="eyebrow">For individuals</span>
       <h2 class="display">I'm growing my <em>career</em></h2>
       <ul><li>Mentor Circles</li><li>Learning Studio</li><li>Job board</li><li>Members' Lounge</li></ul>
       <span class="go">Individual membership <i aria-hidden="true">→</i></span>
     </a>
-    <a class="path p2" routerLink="/membership" tilt reveal="120">
+    <a class="path p2 rv-right" routerLink="/membership" tilt reveal="120">
       <span class="eyebrow">For organizations</span>
       <h2 class="display">We want to <em>partner &amp; hire</em></h2>
       <ul><li>Team memberships</li><li>Post jobs</li><li>Sponsor the Forum</li><li>Custom training</li></ul>
@@ -55,7 +56,7 @@ import { IconComponent } from '@shared/icons';
   <!-- JOURNEY -->
   <section class="sec journey" id="journey" aria-labelledby="h-j">
     <div class="wrap">
-      <div class="sec-h" reveal><div><div class="eyebrow">The CL-A journey</div><h2 id="h-j">Five steps from <em>first hello</em> to giving back</h2></div><p>Wherever you are in your career, there's a next step. Members move along this path at their own pace.</p></div>
+      <div class="sec-h" reveal><div><div class="eyebrow">The Velora journey</div><h2 id="h-j">Five steps from <em>first hello</em> to giving back</h2></div><p>Wherever you are in your career, there's a next step. Members move along this path at their own pace.</p></div>
       <div class="j-grid" reveal>
         <div class="j-tabs" role="tablist" aria-label="Journey steps">
           @for (j of journey; track j.k; let i = $index) {
@@ -153,7 +154,7 @@ import { IconComponent } from '@shared/icons';
   <!-- GIVE -->
   <section class="sec give-sec" aria-labelledby="h-g">
     <div class="wrap give" reveal>
-      <img [src]="img.network" alt="" loading="lazy">
+      <img [src]="img.network" alt="" loading="lazy" class="no-kb" parallax="0.18">
       <div class="give-in">
         <div class="eyebrow light">Give</div>
         <h2 id="h-g" class="display">Open the door for <em class="script">her</em> first leadership role.</h2>
@@ -171,7 +172,7 @@ export class HomePage implements OnInit, OnDestroy {
   events = EVENTS.slice().sort((a, b) => a.date.localeCompare(b.date));
   resources = RESOURCES.slice(0, 4);
   slides = [IMG.hero, IMG.hero3, IMG.hotel];
-  words = ['Hospitality', 'Tourism', 'Recreation', 'Leadership', 'Mentorship', 'Community', 'Hospitality', 'Tourism', 'Recreation', 'Leadership', 'Mentorship', 'Community'];
+  words = ['Hospitality', 'Culinary', 'Wellness', 'Leadership', 'Mentorship', 'Community', 'Hospitality', 'Culinary', 'Wellness', 'Leadership', 'Mentorship', 'Community'];
   jRoutes = ['/contact', '/events', '/academy', '/summit', '/mentorship'];
   slide = signal(0); step = signal(0); story = signal(0); paused = signal(false);
   private t: ReturnType<typeof setInterval>[] = [];
